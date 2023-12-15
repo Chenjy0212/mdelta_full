@@ -6,8 +6,7 @@
 [![Jupyter](https://img.shields.io/badge/-Jupyter-ffffff?logo=jupyter)](https://jupyter.org/)
 [![Rstudio](https://img.shields.io/badge/-Jupyter-ffffff?logo=Rstudio)](https://link.zhihu.com/?target=https%3A//www.r-project.org/)
 
-- **mDELTA** is an algorithm for **_m_**ultifuricating **_D_**evelopmental
-  c**_E_**ll **_L_**ineage **_T_**ree **_A_**lignment. In essence, it compares two
+- **mDELTA** is an algorithm for **_m_**ultifuricating **_D_**evelopmental c**_E_**ll **_L_**ineage **_T_**ree **_A_**lignment. In essence, it compares two
   rooted, unordered, tip-labeled trees, and finds the best global /
   local correspondence between the nodes. The **mDELTA** program is
   designed for analyzing developmental cell lineage trees
