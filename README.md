@@ -6,12 +6,9 @@
 [![Jupyter](https://img.shields.io/badge/-Jupyter-ffffff?logo=jupyter)](https://jupyter.org/)
 [![Rstudio](https://img.shields.io/badge/-Jupyter-ffffff?logo=Rstudio)](https://link.zhihu.com/?target=https%3A//www.r-project.org/)
 
-- **mDELTA** is an algorithm for **m**ultifuricating **D**evelopmental c**E**ll **L**ineage **T**ree **A**lignment. In essence, it compares two
-  rooted, unordered, tip-labeled trees, and finds the best global /
-  local correspondence between the nodes. The **mDELTA** program is
-  designed for analyzing developmental cell lineage trees
+- **`mDELTA`** is an algorithm for **m**ultifuricating **D**evelopmental c**E**ll **L**ineage **T**ree **A**lignment. In essence, it compares two rooted, unordered, tip-labeled trees, and finds the best global ｜ local correspondence between the nodes. The **mDELTA** program is designed for analyzing developmental cell lineage trees
   reconstructed through single-cell DNA barcoding (such as done by
-  **scGESTALT** or **SMALT**, while greater cellular coverage is expected to
+  **`scGESTALT`** or **`SMALT`**, while greater cellular coverage is expected to
   yield more meaningful **mDELTA** alignments).
 
 - Except for dealing with cell lineage trees instead of biological
@@ -29,6 +26,7 @@
   Yat-Sen University in China.
 
 For more details, please visit
+
 <https://github.com/Chenjy0212/mdelta/blob/main/README2.md/> or
 <https://github.com/Chenjy0212/mdelta/blob/main/README.md/>
 
@@ -40,12 +38,12 @@ If you have any questions, please contact me. My contact information is located 
 # Before you begin ⚠️
 
 - It's best to use **jupyter** as your menu display tool, or you can install the corresponding plugin in **vscode** to use it.
-- You can install the required packages automatically by running `mdelta_menu.ipynb`, or you can manually run the `package_manger.py` to install the required packages
-- You should first install stable versions of `Python` and `R` language to facilitate subsequent operations
+- You can install the required packages automatically by running **`mdelta_menu.ipynb`**, or you can manually run the **`package_manger.py`** to install the required packages
+- You should first install stable versions of **`Python`** and **`R`** language to facilitate subsequent operations
 
 # Quick start 💻
 
-#### Open the Munu
+#### Open the Munu 📖
 
 Open jupyter and run `mdelta_menu.ipynb`, run the following code to automatically install the necessary Python packages and open the mdelta function menu.
 
@@ -58,7 +56,7 @@ myargs = get_default()
 
 ![菜单](./image/mdelta_menu.png "mdelta menu")
 
-#### Running
+#### Running 🚀
 
 Select, click, and swipe to achieve automatic parameter acquisition. The relevant parameters are detailed in the "参数解析" section of the menu. Continuing to run the next section of code will obtain the desired result.
 
@@ -80,13 +78,36 @@ for ma in forlist(mavv[0], mavv[1], mavvstep):
                         !Rscript $da $mdelta_json $output
 ```
 
-#### Help
+<details>
+<summary>展开查看</summary>
+<pre><code>
+TREE,TREE2,N2T,N2T2,XScoreFile,LScoreFile,top,mavv,mavvstep,mivv,mivvstep,ps,psstep,tqdm,n,mg,mgstep,xs,xsstep,o,PERM,cpu,mdelta,match_tree,network,densitree,da = get_listvalue(myargs.values())
+output = get_output(o)
+notebook, Tqdm = TF_to_10(n, tqdm)
+for ma in forlist(mavv[0], mavv[1], mavvstep):
+    for mi in forlist(mivv[0], mivv[1], mivvstep):
+        for p in forlist(ps[0], ps[1], psstep):
+            for mgg in forlist(mg[0], mg[1], mgstep):
+                for diffs in forlist(xs[0], xs[1], xsstep):
+                    %run $mdelta $TREE $TREE2 -nt $N2T -nt2 $N2T2 -xsd $XScoreFile -lsd $LScoreFile -t $top -ma $ma -mi $mi -p $p -T $Tqdm -n $notebook -mg $mgg -x $diffs -o $output -P $PERM -c $cpu
+                    if not PERM > 0:
+                        mdelta_json = output + '{}_{}_top{}_diff{}_pv{}_miv{}_mav{}_mg{}.json'.format(os.path.basename(TREE).split('.')[0], os.path.basename(TREE2).split('.')[0], top, str(diffs),  str(p), str(mi), str(ma), str(mgg))
+                        !Rscript $match_tree $mdelta_json $XScoreFile $output $ma
+                        %run $network $mdelta_json $output
+                        !Rscript $densitree $mdelta_json $output
+                        !Rscript $da $mdelta_json $output
+</code></pre>
+</details>
+
+#### Help 🧭
 
 Running the following command can obtain the parsing of relevant parameters
 
 ```sh
 mDELTA.py -h
 ```
+
+<!--  -->
 
 ```sh
 usage: mDELTA [-h] [-nt [NAME2TYPEFILE]] [-nt2 [NAME2TYPEFILE2]]

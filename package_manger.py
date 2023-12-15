@@ -11,6 +11,7 @@ dict_pkg_name = {    # 数据处理库
                 'munkres': '0',
                 'matplotlib': '0',
                 'networkx': '0',
+                'tqdm': '0',
                 '--upgrade pip': '0'  # 更新包 # pip install --upgrade package_name
                 }
 
@@ -37,6 +38,7 @@ while count:
         import munkres
         import matplotlib
         import networkx
+        import tqdm
 
         print('import packages: END')
         break
