@@ -1,0 +1,8 @@
+"Times","SubTree","Filename"
+"3","((B,(C,C),B),D,X);","3_Tree1-0_2_dt.pdf"
+"3","((A,A,((B,(C,C),B),D,X)),(E,E,(C,C),E));","3_Tree1-root_dt.pdf"
+"2","(A,A,((B,(C,C),B),D,X));","2_Tree1-0_dt.pdf"
+"2","(B,(C,C),B);","2_Tree1-0_2_0_dt.pdf"
+"3","(A,A,((B,(C,C),B),D,X));","3_Tree2-0_dt.pdf"
+"3","((B,(C,C),B),D,X);","3_Tree2-0_2_dt.pdf"
+"3","((A,A,((B,(C,C),B),D,X)),(E,E,(C,C),E));","3_Tree2-root_dt.pdf"

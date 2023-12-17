@@ -46,7 +46,7 @@ If you have any questions, please contact me. My contact information is located 
 
 # Quick start 💻
 
-#### Open the Munu 📖
+### Open the Munu 📖
 
 Open jupyter and run `mdelta_menu.ipynb`, run the following code to automatically install the necessary Python packages and open the mdelta function menu.
 
@@ -59,7 +59,7 @@ myargs = get_default()
 
 ![菜单](./image/mdelta_menu.png "mdelta menu")
 
-#### Running 🚀
+### Running 🚀
 
 Select, click, and swipe to achieve automatic parameter acquisition. The relevant parameters are detailed in the "参数解析" section of the menu. Continuing to run the next section of code will obtain the desired result.
 
@@ -93,7 +93,7 @@ for ma in forlist(mavv[0], mavv[1], mavvstep):
 </code></pre>
 </details>
 
-#### Help 🧭
+### Help 🧭
 
 Running the following command can obtain the parsing of relevant parameters
 
@@ -273,21 +273,54 @@ mDELTA.py -h
 
 # Input & Output example 🔔
 
-- **input** :
+### input
 
-  > ExampleFile 📂
-  >
-  > > [`tree1.nwk`](https://github.com/Chenjy0212/mdelta_full/tree/main/ExampleFile/tree1.nwk)  
-  > > [`tree2.nwk`](https://github.com/Chenjy0212/mdelta_full/tree/main/ExampleFile/tree2.nwk)
-  > >
-  > > ##### _Qualitative calculation_
-  > >
-  > > [`Name2Type.csv`](https://github.com/Chenjy0212/mdelta_full/tree/main/ExampleFile/Name2Type.csv)  
-  > > [`Xscorefile.csv`](https://github.com/Chenjy0212/mdelta_full/tree/main/ExampleFile/Xscorefile.csv)
-  > >
-  > > ##### Quantitative Calculation\_
-  > >
-  > > [`Lscorefile.csv`](https://github.com/Chenjy0212/mdelta_full/tree/main/ExampleFile/Lscorefile.csv)
+> **ExampleFile** 📂
+>
+> > [`tree1.nwk`](https://github.com/Chenjy0212/mdelta_full/tree/main/ExampleFile/tree1.nwk)  
+> > [`tree2.nwk`](https://github.com/Chenjy0212/mdelta_full/tree/main/ExampleFile/tree2.nwk)
+> >
+> > // _Qualitative calculation_
+> >
+> > [`Name2Type.csv`](https://github.com/Chenjy0212/mdelta_full/tree/main/ExampleFile/Name2Type.csv)  
+> > [`Xscorefile.csv`](https://github.com/Chenjy0212/mdelta_full/tree/main/ExampleFile/Xscorefile.csv)
+> >
+> > // _Quantitative Calculation_
+> >
+> > [`Lscorefile.csv`](https://github.com/Chenjy0212/mdelta_full/tree/main/ExampleFile/Lscorefile.csv)
+
+### output
+
+> **Output_example** 📂
+>
+> > [`network`](https://github.com/Chenjy0212/mdelta_full/tree/main/Output_example/network)
+> >
+> > > **A** -- > [`Circle.pdf`](https://github.com/Chenjy0212/mdelta_full/tree/main/Output_example/network/Circle.pdf)  
+> > > **B** -- > [`Cluster.pdf`](https://github.com/Chenjy0212/mdelta_full/tree/main/Output_example/network/Cluster.pdf)  
+> > > **C** -- > [`Line.pdf`](https://github.com/Chenjy0212/mdelta_full/tree/main/Output_example/network/Line.pdf)
+> >
+> > ![network](./image/network.jpg)
+> >
+> > [`Match_tree`](https://github.com/Chenjy0212/mdelta_full/tree/main/Output_example/Match_tree)
+> >
+> > > [`topN.pdf`](https://github.com/Chenjy0212/mdelta_full/tree/main/Output_example/Match_tree) // N represents the sequence number of the nth
+> >
+> > ![network](./image/match_tree.png)
+> >
+> > [`DensitreeALL`](https://github.com/Chenjy0212/mdelta_full/tree/main/Output_example/DensitreeALL)
+> >
+> > > [`_densitrees_info.csv`](https://github.com/Chenjy0212/mdelta_full/tree/main/Output_example/DensitreeALL/_densitrees_info.csv)  
+> > > ''' All density tree results are represented as ：
+> > >
+> > > 1. MatchTimes_TreeX_Label_densitree_leaves_match.csv
+> > > 2. The nwk subtree sequence file of TreeX and its root node have been converted to a cell type nwk subtree sequence file '''
+> >
+> > [`DensitreeBEST`](https://github.com/Chenjy0212/mdelta_full/tree/main/Output_example/DensitreeBEST)
+> >
+> > > 1. MatchTimes_TreeX_Label_densitree_leaves_match.csv
+> > > 2. The nwk subtree sequence file of TreeX and its root node have been converted to a cell type nwk subtree sequence file '''
+> >
+> > ![network](./image/densitree.png)
 
 # Algorithm ⌨️
 
