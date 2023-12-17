@@ -321,7 +321,7 @@ def get_default():
     #空白时候的提示
     XScoreDictFile.placeholder = '请在此输入文件名或文件路径，或者在最右方点击选择'
     #默认值的选项目列表
-    ScoreDictFileist = ['',
+    ScoreDictFileist = ['ExampleFile/Xscorefile.csv',
                        ]
     XScoreDictFile.options = ScoreDictFileist
     #合在一起
@@ -329,7 +329,7 @@ def get_default():
     
     #定量计算
     #默认值的选项目列表
-    LScoreDictFileist = ['/home/ee_while/mdelta/ExampleFile/Qscorefile.csv']
+    LScoreDictFileist = ['ExampleFile/Lscorefile.csv']
                         # '/home/ee_while/JOB220901/A1.csv',
                         # '/home/ee_while/JOB220901/G2.csv',
                         # '/home/ee_while/JOB220901/G11.csv',

@@ -1156,5 +1156,5 @@ if __name__ == '__main__':
     
     time_end = time.time()  # 记录结束时间
     time_sum = time_end - time_start  # 计算的时间差为程序的执行时间，单位为秒/s
-    print('程序总共运行时间为:'+ str(time_sum) + 's')
+    print('The total running time of the mDELTA algorithm: ', str(time_sum) + 's')
     

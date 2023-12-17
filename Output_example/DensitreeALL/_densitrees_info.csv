@@ -1,0 +1,5 @@
+"Times","SubTree","Filename"
+"2","(A1,A2,((B1,(C1,C2),B2),D1,X));","2_Tree1-0_dt.pdf"
+"2","((A1,A2,((B1,(C1,C2),B2),D1,X)),(E1,E2,(C1,C2),E3));","2_Tree1-root_dt.pdf"
+"2","(A1,A2,((B1,(C1,C2),B2),D1,X));","2_Tree2-0_dt.pdf"
+"2","((A1,A2,((B1,(C1,C2),B2),D1,X)),(E1,E2,(C1,C2),E3));","2_Tree2-root_dt.pdf"

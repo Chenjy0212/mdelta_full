@@ -4,7 +4,7 @@
 
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/DecryptLogin?logo=python&labelColor=white)](https://pypi.org/project/mdelta/)
 [![Jupyter](https://img.shields.io/badge/-Jupyter-ffffff?logo=jupyter)](https://jupyter.org/)
-[![Rstudio](https://img.shields.io/badge/-Jupyter-ffffff?logo=Rstudio)](https://link.zhihu.com/?target=https%3A//www.r-project.org/)
+[![r](https://img.shields.io/badge/-Rcript-blue?logo=R)](https://www.r-project.org/)
 
 - **`mDELTA`** is an algorithm for **m**ultifuricating **D**evelopmental c**E**ll **L**ineage **T**ree **A**lignment. In essence, it compares two rooted, unordered, tip-labeled trees, and finds the best global ｜ local correspondence between the nodes. The **mDELTA** program is designed for analyzing developmental cell lineage trees
   reconstructed through single-cell DNA barcoding (such as done by
@@ -27,19 +27,22 @@
 
 For more details, please visit
 
-<https://github.com/Chenjy0212/mdelta/blob/main/README2.md/> or
-<https://github.com/Chenjy0212/mdelta/blob/main/README.md/>
+> - You can try to learn about the latest examples of dynamic mDELTA running results, which will help you better understand the purpose of mDERTA ⚙️
+>   <http://eewhile.cn/mdelta_ui>
+> - You can obtain a separate Python package for mDELTA for further development
+>   <https://github.com/Chenjy0212/mdelta>
 
 If you have any questions, please contact me. My contact information is located at the bottom
 
-[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=Chenjy0212&repo=mdelta)](https://github.com/Chenjy0212/mdelta)
 [![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=Chenjy0212&repo=mdelta_full)](https://github.com/Chenjy0212/mdelta_full)
+[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=Chenjy0212&repo=mdelta)](https://github.com/Chenjy0212/mdelta)
 
 # Before you begin ⚠️
 
-- It's best to use **jupyter** as your menu display tool, or you can install the corresponding plugin in **vscode** to use it.
-- You can install the required packages automatically by running **`mdelta_menu.ipynb`**, or you can manually run the **`package_manger.py`** to install the required packages
-- You should first install stable versions of **`Python`** and **`R`** language to facilitate subsequent operations
+1. It's best to use **jupyter** as your menu display tool, or you can install the corresponding plugin in **vscode** to use it.
+2. You can install the required packages automatically by running **`mdelta_menu.ipynb`**, or you can manually run the **`package_manger.py`** to install the required packages.
+   > **Tips** : The first download time may be relatively long. If any installation package fails, please go ahead and install a package that is suitable for your current running environment (Python and R)
+3. You should first install stable versions of **`Python`** and **`R`** language to facilitate subsequent operations
 
 # Quick start 💻
 
@@ -70,7 +73,7 @@ mdelta_json = output + '{}_{}_top{}_diff{}_pv{}_miv{}_mav{}_mg{}.json'.format(os
 ```
 
 <details>
-<summary>show more 👈👈👈</summary>
+<summary>show more 👈👈👈 CLICK</summary>
 <pre><code>
 TREE,TREE2,N2T,N2T2,XScoreFile,LScoreFile,top,mavv,mavvstep,mivv,mivvstep,ps,psstep,tqdm,n,mg,mgstep,xs,xsstep,o,PERM,cpu,mdelta,match_tree,network,densitree,da = get_listvalue(myargs.values())
 output = get_output(o)
@@ -99,7 +102,7 @@ mDELTA.py -h
 ```
 
 <details>
-<summary>show more 👈👈👈</summary>
+<summary>show more 👈👈👈 CLICK</summary>
 <h3>Positional arguments 👍</h1>
 <table border="1">
 <tr>
@@ -268,10 +271,27 @@ mDELTA.py -h
 
 </details>
 
-# Algorithm ⌨️
-![菜单](./image/mdelta_algorithm.png "mdelta algorithm")
+# Input & Output example 🔔
 
-# Result 🔔
+- **input** :
+
+  > ExampleFile 📂
+  >
+  > > [`tree1.nwk`](https://github.com/Chenjy0212/mdelta_full/tree/main/ExampleFile/tree1.nwk)  
+  > > [`tree2.nwk`](https://github.com/Chenjy0212/mdelta_full/tree/main/ExampleFile/tree2.nwk)
+  > >
+  > > ##### _Qualitative calculation_
+  > >
+  > > [`Name2Type.csv`](https://github.com/Chenjy0212/mdelta_full/tree/main/ExampleFile/Name2Type.csv)  
+  > > [`Xscorefile.csv`](https://github.com/Chenjy0212/mdelta_full/tree/main/ExampleFile/Xscorefile.csv)
+  > >
+  > > ##### Quantitative Calculation\_
+  > >
+  > > [`Lscorefile.csv`](https://github.com/Chenjy0212/mdelta_full/tree/main/ExampleFile/Lscorefile.csv)
+
+# Algorithm ⌨️
+
+![菜单](./image/mdelta_algorithm.png "mdelta algorithm")
 
 # Authors 🍊🐳❤️🍑
 

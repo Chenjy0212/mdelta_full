@@ -322,7 +322,7 @@ for(Position in 1:nrow(data)){
     mylength = max(max(length(x$tip.label)+length(x_match$tip.label),length(y$tip.label)+length(y_match$tip.label)), 10)
     #mylength
 
-    filename = paste(output,"Match_tree/",Position, ".pdf", sep="")
+    filename = paste(output,"Match_tree/","top",Position, ".pdf", sep="")
     # print(filename)
     ggsave(filename, plot = pp1 /  pp,
            width = min(mylength*10,1000) ,
