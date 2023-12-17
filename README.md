@@ -61,25 +61,16 @@ myargs = get_default()
 Select, click, and swipe to achieve automatic parameter acquisition. The relevant parameters are detailed in the "参数解析" section of the menu. Continuing to run the next section of code will obtain the desired result.
 
 ```python
-TREE,TREE2,N2T,N2T2,XScoreFile,LScoreFile,top,mavv,mavvstep,mivv,mivvstep,ps,psstep,tqdm,n,mg,mgstep,xs,xsstep,o,PERM,cpu,mdelta,match_tree,network,densitree,da = get_listvalue(myargs.values())
-output = get_output(o)
-notebook, Tqdm = TF_to_10(n, tqdm)
-for ma in forlist(mavv[0], mavv[1], mavvstep):
-    for mi in forlist(mivv[0], mivv[1], mivvstep):
-        for p in forlist(ps[0], ps[1], psstep):
-            for mgg in forlist(mg[0], mg[1], mgstep):
-                for diffs in forlist(xs[0], xs[1], xsstep):
-                    %run $mdelta $TREE $TREE2 -nt $N2T -nt2 $N2T2 -xsd $XScoreFile -lsd $LScoreFile -t $top -ma $ma -mi $mi -p $p -T $Tqdm -n $notebook -mg $mgg -x $diffs -o $output -P $PERM -c $cpu
-                    if not PERM > 0:
-                        mdelta_json = output + '{}_{}_top{}_diff{}_pv{}_miv{}_mav{}_mg{}.json'.format(os.path.basename(TREE).split('.')[0], os.path.basename(TREE2).split('.')[0], top, str(diffs),  str(p), str(mi), str(ma), str(mgg))
-                        !Rscript $match_tree $mdelta_json $XScoreFile $output $ma
-                        %run $network $mdelta_json $output
-                        !Rscript $densitree $mdelta_json $output
-                        !Rscript $da $mdelta_json $output
+%run $mdelta $TREE $TREE2 -nt $N2T -nt2 $N2T2 -xsd $XScoreFile -lsd $LScoreFile -t $top -ma $ma -mi $mi -p $p -T $Tqdm -n $notebook -mg $mgg -x $diffs -o $output -P $PERM -c $cpu
+mdelta_json = output + '{}_{}_top{}_diff{}_pv{}_miv{}_mav{}_mg{}.json'.format(os.path.basename(TREE).split('.')[0], os.path.basename(TREE2).split('.')[0], top, str(diffs),  str(p), str(mi), str(ma), str(mgg))
+!Rscript $match_tree $mdelta_json $XScoreFile $output $ma
+%run $network $mdelta_json $output
+!Rscript $densitree $mdelta_json $output
+!Rscript $da $mdelta_json $output
 ```
 
 <details>
-<summary>展开查看</summary>
+<summary>show more 👈👈👈</summary>
 <pre><code>
 TREE,TREE2,N2T,N2T2,XScoreFile,LScoreFile,top,mavv,mavvstep,mivv,mivvstep,ps,psstep,tqdm,n,mg,mgstep,xs,xsstep,o,PERM,cpu,mdelta,match_tree,network,densitree,da = get_listvalue(myargs.values())
 output = get_output(o)
@@ -107,35 +98,54 @@ Running the following command can obtain the parsing of relevant parameters
 mDELTA.py -h
 ```
 
-<!--  -->
+<details>
+<summary>show more 👈👈👈</summary>
+<h3>Positional arguments 👍</h1>
+<table border="1">
+<tr>
+<th>Parameter</th> 
+<th>Type</th> 
+<th>Description</th>
+</tr>
+<td> TreeSeqFile </td>
+<td> [path/filename] </td> 
+<td> A text file storing cell lineage tree #1 in newick format. Tips can be labeled by name or cell type. Branch lengths should be removed. </td>
+</tr>
+<tr>
+<td> TreeSeqFile2 </td>
+<td> [path/filename] </td> 
+<td> A text file storing cell lineage tree #2 in newick format. Tips can be labeled by name or cell type. Branch lengths should be removed. </td>
+</tr>
+</table>
 
-```sh
-usage: mDELTA [-h] [-nt [NAME2TYPEFILE]] [-nt2 [NAME2TYPEFILE2]]
-              [-xsd [XSCOREDICTFILE]] [-lsd [LSCOREDICTFILE]] [-t TOP]
-              [-ma MAV] [-mi MIV] [-p PV] [-T TQDM] [-n NOTEBOOK] [-P PERM]
-              [-a ALG] [-c CPUS] [-o [OUTPUT]] [-mg MERGE] [-x DIFF]
-              TreeSeqFile TreeSeqFile2
+<h3>Optional arguments 👌</h1>
+<table border="1">
+<tr>
+<th>Parameter</th> 
+<th>Type</th> 
+<th>Description</th>
+</tr>
+<td> -h, --help </td>
+<td></td> 
+<td> show this help message and exit </td>
+</tr>
 
-Multifuricating Developmental cEll Lineage Tree Alignment(mDELTA)
+<tr>
+<td> -nt NAME2TYPEFILE, <br>--Name2TypeFile NAME2TYPEFILE </td>
+<td> [path/filename] </td> 
+<td> List of correspondance between tip name and cell type for cell lineage tree #1. </td>
+</tr>
 
-positional arguments:
-  TreeSeqFile           [path/filename] A text file storing cell lineage tree
-                        #1 in newick format. Tips can be labeled by name or
-                        cell type. Branch lengths should be removed.
-  TreeSeqFile2          [path/filename] A text file storing cell lineage tree
-                        #2 in newick format. Tips can be labeled by name or
-                        cell type. Branch lengths should be removed.
+<tr>
+<td> -nt2 NAME2TYPEFILE, <br>--Name2TypeFile2 NAME2TYPEFILE </td>
+<td> [path/filename] </td> 
+<td> List of correspondance between tip name and cell type for cell lineage tree #2. </td>
+</tr>
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -nt [NAME2TYPEFILE], --Name2TypeFile [NAME2TYPEFILE]
-                        [path/filename] List of correspondance between tip
-                        name and cell type for cell lineage tree #1.
-  -nt2 [NAME2TYPEFILE2], --Name2TypeFile2 [NAME2TYPEFILE2]
-                        [path/filename] List of correspondance between tip
-                        name and cell type for cell lineage tree #2.
-  -xsd [XSCOREDICTFILE], --XScoreDictFile [XSCOREDICTFILE]
-                        [path/filename] A comma-delimited text file used to
+<tr>
+<td> -xsd XSCOREDICTFILE, <br>--ScoreDictFile SCOREDICTFILE </td>
+<td> [path/filename] </td> 
+<td> A comma-delimited text file used to
                         determine similarity scores between cells. If there
                         are exactly three columns, they will be interpreted as
                         (1) the cell (name or type) in Tree #1, (2) the cell
@@ -145,55 +155,123 @@ optional arguments:
                         features of the cell (e.g. expression of a gene). The
                         similarity scores will be estimated between all pairs
                         of cells based on the Euclidean distance calculated
-                        using all the features. Overrides `-ma` and `-mi`.
-  -lsd [LSCOREDICTFILE], --LScoreDictFile [LSCOREDICTFILE]
-                        [path/filename] A score matrix where row names
-                        represent the names of all leaf nodes in the first
-                        tree, column names represent the names of all leaf
-                        nodes in the second tree, and the corresponding score
-                        values in the column and column spaces represent their
-                        matching scores.
-  -t TOP, --top TOP     [int > 0] Performs local (instead of global)
+                        using all the features. Overrides `-ma` and `-mi`. </td>
+</tr>
+
+<tr>
+<td> -lsd LSCOREDICTFILE1, <br>--ScoreDictFile1 SCOREDICTFILE1 </td>
+<td> [path/filename] </td> 
+<td> Calculate the Euclidean distance based on the characteristics of the cell (such as gene expression) to obtain the result x, and obtain the corresponding score through a series of operations such as - ln (x+1). </td>
+</tr>
+
+<tr>
+<td> -t TOP, --top TOP </td>
+<td> [int > 0] </td> 
+<td> Performs local (instead of global)
                         alignment, and output the top NUM local alignments
                         with the highest score (e.g. `-t 10`). In the case of
-                        global alignment, this parameter should be omitted.
-  -ma MAV, --mav MAV    [float] Default=2.
-  -mi MIV, --miv MIV    [float] Default=-1. Shorthand for a simple matching
+                        global alignment, this parameter should be omitted. </td>
+</tr>
+
+<tr>
+<td> -ma MAV, --mav MAV </td>
+<td> [float] </td> 
+<td> Default=2. Score of two paired end nodes with the same name or type.  </td>
+</tr>
+
+<tr>
+<td> -mi MIV, --miv MIV </td>
+<td> [float] </td> 
+<td> Default=-1. Shorthand for a simple matching
                         score scheme, where the matching score between a pair
                         of the same cell types is MAV and all other pairs are
-                        MIV. (e.g. `-ma 2 -mi -2`). Overridden by `-sd`.
-  -p PV, --pv PV        [float] The score for pruning a tip of the tree (e.g.
-                        `-p -2`). Default to -1.
-  -T TQDM, --Tqdm TQDM  [0(off) or 1(on)] Toggle for the jupyter notebook
-                        environment.
-  -n NOTEBOOK, --notebook NOTEBOOK
-                        [0(off) or 1(on)] Toggle for the jupyter notebook
-                        environment.
-  -P PERM, --PERM PERM  [int > 0] Toggle for the statistical significance. For
+                        MIV. (e.g. `-ma 2 -mi -2`). Overridden by `-sd`. </td>
+</tr>
+
+<tr>
+<td> -p PV, --pv PV  </td>
+<td> [float] </td> 
+<td> Default=-1. The score for pruning a tip of the tree (e.g.
+                        `-p -2`). Default to -1. </td>
+</tr>
+
+<tr>
+<td> -T TQDM, <tqdm>--Tqdm TQDM  </td>
+<td> [0(off) or 1(on)] </td> 
+<td> Whether to display the running Progress bar </td>
+</tr>
+
+<tr>
+<td> -n NOTEBOOK, <br>--notebook NOTEBOOK  </td>
+<td> [0(off) or 1(on)] </td> 
+<td> Toggle for the jupyter notebook
+                        environment. </td>
+</tr>
+
+<tr>
+<td> -P PERM, --PERM PERM  </td>
+<td> [int > 0] </td> 
+<td> Toggle for the statistical significance. For
                         each observed alignment, the aligned trees will be
                         permuted PERM times to generate a null distribution of
                         alignment scores, with which a P value can be
-                        calculated for the observed alignment score.
-  -a ALG, --Alg ALG     [KM / GA] Use Kuhn-Munkres or Greedy Algorithm to find
-                        the optimal alignment score.
-  -c CPUS, --CPUs CPUS  [int > 0] Number of threads for multi-processing.
+                        calculated for the observed alignment score. </td>
+</tr>
+
+<tr>
+<td> -c CPUS, --CPUs CPUS  </td>
+<td> [int > 0] </td> 
+<td> Number of threads for multi-processing.
                         Default to 50., it can reach the maximum number of
-                        local CPU cores - 1.
-  -o [OUTPUT], --output [OUTPUT]
-                        [path] Output path, eg:'/home/username'
-  -mg MERGE, --merge MERGE
-                        [float] This is the scaling factor for calculating the
+                        local CPU cores - 1. </td>
+</tr>
+
+<tr>
+<td> -o OUTPUT, <br>--output OUTPUT  </td>
+<td> [path] </td> 
+<td> Output path, eg:'/home/username' </td>
+</tr>
+
+<tr>
+<td> -mg MERGE, <br>--merge MERGE  </td>
+<td> [float] </td> 
+<td> This is the scaling factor for calculating the
                         score of merging an internal node (e.g. -mg -1), which
                         is multiplied by the number of tips of the internal
-                        node to be merged. Default to 100.
-  -x DIFF, --diff DIFF  [int > 0] Alignment must consist of a minimal of DIFF
+                        node to be merged. Default to 0. </td>
+</tr>
+
+<tr>
+<td> -x DIFF, <br>--diff DIFF  </td>
+<td> [int > 0] </td> 
+<td> Alignment must consist of a minimal of DIFF
                         percent aligned cell pairs that are different from
                         previous(better) local alignments in order to be
                         considered as another new alignment (e.g. `-x 20`
-                        means 20 percent).
+                        means 20 percent). </td>
+</tr>
 
-More details on https://github.com/Chenjy0212/modelta
-```
+</table>
+
+<br>
+<div> 
+    More details on :
+    <a href='https://github.com/Chenjy0212/mdelta_full' style='display: flex' target="_blank"> 
+        <h1 style='color: red'>M </h1>
+        <h1 style='color: orange'>D </h1>
+        <h1 style='color: green'>E </h1>
+        <h1 style='color: lightblue'>L </h1>
+        <h1 style='color: blue'>T </h1>
+        <h1 style='color: purple'>A </h1>
+    </a>
+</div>
+
+</details>
+
+# Algorithm ⌨️
+![菜单](./image/mdelta_algorithm.png "mdelta algorithm")
+
+# Result 🔔
 
 # Authors 🍊🐳❤️🍑
 
