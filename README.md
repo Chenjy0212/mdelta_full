@@ -137,7 +137,6 @@ mDELTA.py -h
 <td></td> 
 <td> show this help message and exit </td>
 </tr>
-
 <tr>
 <td> -nt NAME2TYPEFILE, <br>--Name2TypeFile NAME2TYPEFILE </td>
 <td> [path/filename] </td> 
@@ -282,17 +281,19 @@ mDELTA.py -h
 
 > **ExampleFile** 📂
 >
-> > [`tree1.nwk`](https://github.com/Chenjy0212/mdelta_full/tree/main/ExampleFile/tree1.nwk)  
-> > [`tree2.nwk`](https://github.com/Chenjy0212/mdelta_full/tree/main/ExampleFile/tree2.nwk)
+> > [`tree1.nwk`](https://github.com/Chenjy0212/mdelta_full/tree/main/ExampleFile/tree1.nwk) # A
+> > [`tree2.nwk`](https://github.com/Chenjy0212/mdelta_full/tree/main/ExampleFile/tree2.nwk) # B
 > >
 > > // _Qualitative calculation_
 > >
-> > [`Name2Type.csv`](https://github.com/Chenjy0212/mdelta_full/tree/main/ExampleFile/Name2Type.csv)  
+> > [`Name2Type.csv`](https://github.com/Chenjy0212/mdelta_full/tree/main/ExampleFile/Name2Type.csv) # C
 > > [`Xscorefile.csv`](https://github.com/Chenjy0212/mdelta_full/tree/main/ExampleFile/Xscorefile.csv)
 > >
 > > // _Quantitative Calculation_
 > >
 > > [`Lscorefile.csv`](https://github.com/Chenjy0212/mdelta_full/tree/main/ExampleFile/Lscorefile.csv)
+> >
+> > ![network](./image/input_info.png)
 
 ### output
 
@@ -300,9 +301,9 @@ mDELTA.py -h
 >
 > > [`network`](https://github.com/Chenjy0212/mdelta_full/tree/main/Output_example/network)
 > >
-> > > **A** -- > [`Circle.pdf`](https://github.com/Chenjy0212/mdelta_full/tree/main/Output_example/network/Circle.pdf)  
-> > > **B** -- > [`Cluster.pdf`](https://github.com/Chenjy0212/mdelta_full/tree/main/Output_example/network/Cluster.pdf)  
-> > > **C** -- > [`Line.pdf`](https://github.com/Chenjy0212/mdelta_full/tree/main/Output_example/network/Line.pdf)
+> > > [`Circle.pdf`](https://github.com/Chenjy0212/mdelta_full/tree/main/Output_example/network/Circle.pdf) # A
+> > > [`Cluster.pdf`](https://github.com/Chenjy0212/mdelta_full/tree/main/Output_example/network/Cluster.pdf) # B
+> > > [`Line.pdf`](https://github.com/Chenjy0212/mdelta_full/tree/main/Output_example/network/Line.pdf) # C
 > >
 > > ![network](./image/network.jpg)
 > >
@@ -329,7 +330,25 @@ mDELTA.py -h
 
 # Algorithm ⌨️
 
+Using the idea of dynamic programming, update the score matrix. Except for the scores of the end nodes derived from default values or user input `socrefile`, the scores of all other cells are calculated using the **weighted bipartite graph most matching algorithm (KM)** to obtain the optimal value
+
 ![菜单](./image/mdelta_algorithm.png "mdelta algorithm")
+
+---
+
+# Background 🌙
+
+![bg](./image/mdelta_reasons.png)
+
+# Data preprocessing 🤖
+
+In order to speed up our computing speed, we can prepare the socrefile in advance, and use the data preprocessing program (data_preprocess/`pre_cal.ipynb`) and cutoff(data_preprocess/`cutoff.ipynb`) program to calculate our biological data in advance, which can be reused or regenerated in the future. Greatly improve efficiency.
+
+![pre](./image/score_pre.png)
+
+# Procedure 🎬
+
+![procedure](./image/procedure.png)
 
 # Authors 🍊🐳❤️🍑
 
