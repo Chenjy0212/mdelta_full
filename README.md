@@ -1,4 +1,4 @@
-# mDELTA: an algorithm for *m*ultifuricating _D_ evelopmental c*E*ll *L*ineage *T*ree *A*lignment.
+# mDELTA: an algorithm for *m*ultifuricating *D*evelopmental c*E*ll *L*ineage *T*ree *A*lignment.
 
 <a href="https://github.com/Chenjy0212/mdelta_full/blob/main/image/mDELTA.png"><img src="./image/mDELTA.png" height="500" align="right" /></a>
 
@@ -31,8 +31,6 @@ For more details, please visit
 >   <http://eewhile.cn/mdelta_ui>
 >
 > ![mdelta_ui](./image/mdelta_ui.png)
->
-> ![mdelta_ui](./image/mdelta_ui2.png)
 >
 > - You can obtain a separate Python package for mDELTA for further development
 >   <https://github.com/Chenjy0212/mdelta>
@@ -305,7 +303,7 @@ mDELTA.py -h
 > > > [`Cluster.pdf`](https://github.com/Chenjy0212/mdelta_full/tree/main/Output_example/network/Cluster.pdf) # B
 > > > [`Line.pdf`](https://github.com/Chenjy0212/mdelta_full/tree/main/Output_example/network/Line.pdf) # C
 > >
-> > ![network](./image/network.jpg)
+> > ![network](./image/network.png)
 > >
 > > [`Match_tree`](https://github.com/Chenjy0212/mdelta_full/tree/main/Output_example/Match_tree)
 > >

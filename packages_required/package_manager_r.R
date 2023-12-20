@@ -19,19 +19,3 @@ missing_packages_bioc <- setdiff(required_packages_bioc, installed.packages())
 if (length(missing_packages_bioc) > 0) {
   BiocManager::install(missing_packages_bioc)
 }
-# 加载所需的包
-# lapply(required_packages, library, character.only = TRUE)
-
-# if(!require("rjson", quietly=TRUE)){
-# 	install.packages("rjson", repos = "http://cran.us.r-project.org")
-# }
-# if (!require("BiocManager", quietly = TRUE)){
-#     install.packages("BiocManager", repos = "http://cran.us.r-project.org")
-# }
-# if(!require("ggtree", quietly=TRUE)){
-# 	BiocManager::install("ggtree")
-# }
-# if(!require("ggtreeExtra", quietly=TRUE)){
-# 	BiocManager::install("ggtreeExtra")
-# }
-
