@@ -39,6 +39,7 @@ If you have any questions, please contact me. My contact information is located 
 
 [![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=Chenjy0212&repo=mdelta_full)](https://github.com/Chenjy0212/mdelta_full)
 [![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=Chenjy0212&repo=mdelta)](https://github.com/Chenjy0212/mdelta)
+[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=Chenjy0212&repo=mdelta_prepro)](https://github.com/Chenjy0212/mdelta_prepro)
 
 # Before you begin ⚠️
 
@@ -259,7 +260,7 @@ mDELTA.py -h
 </table>
 
 <br>
-<div> 
+<!-- <div> 
     More details on :
     <a href='https://github.com/Chenjy0212/mdelta_full' style='display: flex' target="_blank"> 
         <h1 style='color: red'>M </h1>
@@ -269,7 +270,7 @@ mDELTA.py -h
         <h1 style='color: blue'>T </h1>
         <h1 style='color: purple'>A </h1>
     </a>
-</div>
+</div> -->
 
 </details>
 
@@ -340,9 +341,11 @@ Using the idea of dynamic programming, update the score matrix. Except for the s
 
 # Data preprocessing 🤖
 
-In order to speed up our computing speed, we can prepare the socrefile in advance, and use the data preprocessing program (data_preprocess/`pre_cal.ipynb`) and cutoff(data_preprocess/`cutoff.ipynb`) program to calculate our biological data in advance, which can be reused or regenerated in the future. Greatly improve efficiency.
+In order to speed up our computing speed, we can prepare the socrefile in advance, and use the data preprocessing program [`mdelta_prepro`](https://github.com/Chenjy0212/mdelta_prepro) to calculate our biological data in advance, which can be reused or regenerated in the future. Greatly improve efficiency.
 
 ![pre](./image/score_pre.png)
+[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=Chenjy0212&repo=mdelta_prepro)](https://github.com/Chenjy0212/mdelta_prepro)
+![pre2](./image/mdelta_prepro.png)
 
 # Procedure 🎬
 
