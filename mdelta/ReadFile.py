@@ -9,6 +9,7 @@ from pandas.api.types import is_string_dtype
 from pandas.api.types import is_numeric_dtype
 import numpy as np
 import os
+from Bio import Phylo
 
 
 # 读取 .nwk类文件并把谱系树中的节点名称转换为类型
@@ -28,15 +29,27 @@ def ReadTreeSeq_Name2Type(TreeSeqFilePath, Name2TypeFilePath):
         content = content.replace(spl[0], spl[1])
     return content.replace(';', '')
 
+# 去除中间节点和枝长信息
+def simplify_tree(clade):
+    if clade.is_terminal():
+        return clade.name
+    else:
+        # 递归处理子节点
+        children_names = [simplify_tree(child) for child in clade]
+        return "(" + ",".join(children_names) + ")"
 def ReadTreeSeq(TreeSeqFilePath):
-    file1= open(TreeSeqFilePath,encoding='utf-8') #读取到文本的所有内容
-    content=file1.read()
-    content=re.sub("\:\d+", "", content)
-    content=re.sub("\)\d+", ")", content)
-    content=re.sub("\.\d+", "", content)
-    content=content.strip()
-    #print(content)
-    return content.replace(';', '')
+    # file1= open(TreeSeqFilePath,encoding='utf-8') #读取到文本的所有内容
+    # content=file1.read()
+    # content=re.sub("\:\d+", "", content)
+    # content=re.sub("\)\d+", ")", content)
+    # content=re.sub("\.\d+", "", content)
+    # content=content.strip()
+    # #print(content)
+    # return content.replace(';', '')
+    tree = Phylo.read(TreeSeqFilePath, "newick")
+    newick_tree = simplify_tree(tree.clade)
+    return newick_tree
+
 
 def Scoredict(lllleaf, llllleaf, mav:float, miv:float):
     #如果是自动生成的话

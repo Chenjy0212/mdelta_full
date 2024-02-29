@@ -12,6 +12,7 @@ dict_pkg_name = {    # 数据处理库
                 'matplotlib': '0',
                 'networkx': '0',
                 'tqdm': '0',
+                'Bio':'0',
                 '--upgrade pip': '0'  # 更新包 # pip install --upgrade package_name
                 }
 
@@ -39,6 +40,7 @@ while count:
         import matplotlib
         import networkx
         import tqdm
+        import Bio
 
         print('import packages: END')
         break
