@@ -115,8 +115,8 @@ for (iii in 1:nrow(sorttree1)) {
     file_path2 <- paste(output, "DensitreeALL/", nrow(Root1_Root2), "_", whichtree, "_", Chosen_Root1, "_sub_tree.nwk", sep = "")
 
     # 将字符串保存到文件
-    writeLines(tree1, file_path)
-    writeLines(tree1_seq, file_path2)
+    # writeLines(tree1, file_path)
+    # writeLines(tree1_seq, file_path2)
 
     tree1_label <- Root1_Root2$Root1_label_node[1]
 
@@ -181,6 +181,8 @@ for (iii in 1:nrow(sorttree1)) {
     base_prune_count <- c(0, "base_prune") # 统计base剪枝个数
     prune_count <- c(0, "prune") # 统计对应的剪枝个数
     score_count <- c(0, "Score") # 统计对应的得分
+    tree_seq <- c(0, tree1_seq) # 子树的原结构
+
     for (i in 1:nrow(Root1_Root2)) {
         Root2_match_tree <- Root1_Root2$Root2_match_tree[i]
         # print(Root2_match_tree)
@@ -251,8 +253,9 @@ for (iii in 1:nrow(sorttree1)) {
         base_prune_count[i + 2] <- lengths(Root1_Root2$Root1_prune[i])
         prune_count[i + 2] <- lengths(Root1_Root2$Root2_prune[i])
         score_count[i + 2] <- Root1_Root2$Score[i]
+        tree_seq[i + 2] <- Root1_Root2$Root2_seq[i]
     }
-    match_dataframe <- rbind(match_dataframe, base_prune_count, prune_count, score_count)
+    match_dataframe <- rbind(match_dataframe, base_prune_count, prune_count, score_count, tree_seq)
     pg + scale_color_manual(values = c(
         "C3" = "#A6CEE3",
         "C1" = "#1F78B4",
@@ -267,7 +270,7 @@ for (iii in 1:nrow(sorttree1)) {
         "R1" = "#FFFF99",
         "C8" = "#B15928",
         # 'UK' = 'grey',
-        "A" = "#a11f1f", "B" = "#0e0ea6", "C" = "#246f24", "D" = "#afaf1e", "E" = "#aa707a", "F" = "#c58204"
+        "A" = "#a11f1f", "B" = "#0e0ea6", "C" = "#246f24", "D" = "#afaf1e", "E" = "#aa707a", "F" = "#c58204", "X" = "#5c5450"
     ))
 
     width <- max((2.2 * match_times1[iii]), 10)
@@ -312,12 +315,13 @@ for (iii in 1:nrow(sorttree1)) {
     mysize <- 3
 
     tree1 <- Root1_Root2$Root1_node[1] # 取第一个
-    # print(tree1)
+    tree1_seq <- Root1_Root2$Root1_seq[1] # 取第一个
+
     # 设置文件路径和文件名
     file_path <- paste(output, "DensitreeALL/", nrow(Root1_Root2), "_", whichtree, "_", Chosen_Root1, "_sub_tree.nwk", sep = "")
 
     # 将字符串保存到文件
-    writeLines(tree1, file_path)
+    # writeLines(tree1, file_path)
 
     tree1_label <- Root1_Root2$Root1_label_node[1]
 
@@ -382,6 +386,8 @@ for (iii in 1:nrow(sorttree1)) {
     base_prune_count <- c(0, "base_prune") # 统计base剪枝个数
     prune_count <- c(0, "prune") # 统计对应的剪枝个数
     score_count <- c(0, "Score") # 统计对应的得分
+    tree_seq <- c(0, tree1_seq) # 子树的原结构
+
     for (i in 1:nrow(Root1_Root2)) {
         Root2_match_tree <- Root1_Root2$Root2_match_tree[i]
         # print(Root2_match_tree)
@@ -450,8 +456,9 @@ for (iii in 1:nrow(sorttree1)) {
         base_prune_count[i + 2] <- lengths(Root1_Root2$Root1_prune[i])
         prune_count[i + 2] <- lengths(Root1_Root2$Root2_prune[i])
         score_count[i + 2] <- Root1_Root2$Score[i]
+        tree_seq[i + 2] <- Root1_Root2$Root2_seq[i]
     }
-    match_dataframe <- rbind(match_dataframe, base_prune_count, prune_count, score_count)
+    match_dataframe <- rbind(match_dataframe, base_prune_count, prune_count, score_count, tree_seq)
     pg + scale_color_manual(values = c(
         "C3" = "#A6CEE3",
         "C1" = "#1F78B4",
@@ -466,7 +473,7 @@ for (iii in 1:nrow(sorttree1)) {
         "R1" = "#FFFF99",
         "C8" = "#B15928",
         # 'UK' = 'grey',
-        "A" = "#a11f1f", "B" = "#0e0ea6", "C" = "#246f24", "D" = "#afaf1e", "E" = "#aa707a", "F" = "#c58204"
+        "A" = "#a11f1f", "B" = "#0e0ea6", "C" = "#246f24", "D" = "#afaf1e", "E" = "#aa707a", "F" = "#c58204", "X" = "#5c5450"
     ))
     width <- max((2.2 * match_times2[iii]), 10)
     # print(width)
