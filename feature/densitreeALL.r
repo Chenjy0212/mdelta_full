@@ -10,8 +10,8 @@ suppressMessages(library(treeio))
 suppressMessages(library(dplyr))
 
 if (!is.na(args[1]) && args[1] != "") {
-    data <- jsonlite::stream_in(file(args[1]))
-    # print(args[1])
+    suppressMessages(data <- jsonlite::stream_in(file(args[1]), verbose = FALSE))
+    # cat(args[1])
 }
 if (!is.na(args[2]) && args[2] != "" && args[2] != "non") {
     output <- args[2]
@@ -22,7 +22,7 @@ folder_path <- paste(output, "DensitreeALL", sep = "")
 if (!dir.exists(folder_path)) {
     # 如果文件夹不存在，则创建文件夹
     dir.create(folder_path)
-    # print("文件夹已创建")
+    # cat("文件夹已创建")
 }
 
 # 定义函数
@@ -64,19 +64,17 @@ TabelLabel <- function(atabel) {
         # 父节点为当前节点的，为根节点
     }
     rootindex <- which(is.na(atabel$label) == "TRUE")
-    # print(rootindex)
+    # cat(rootindex)
     atabel[rootindex, ]$label <- "root"
     atabel
 }
 
 # 保存 densitree info
 info <- data.frame(var1 = "", var2 = "", var3 = "")[-1, ]
-# info <- rbind(info, c(1,2,3))
+# cat(info)
 
-# print(info)
-# print(nrow(table(data$Root1_label)) == 1)
 if (nrow(table(data$Root1_label)) == 1) {
-    print("只有单一匹配，结果请查看DensitreeBEST~")
+    cat("只有单一匹配，结果请查看DensitreeBEST~")
     # 结束R会话
     q()
 }
@@ -84,10 +82,6 @@ if (nrow(table(data$Root1_label)) == 1) {
 sorttree1 <- sort(table(data$Root1_label), decreasing = TRUE)
 sorttree2 <- sort(table(data$Root2_label), decreasing = TRUE)
 whichtree <- "Tree1"
-# if(max(sorttree2) > max(sorttree1)){
-#     sorttree1 = sorttree2
-#     data[c('Root1_label', 'Root1_node', 'Root1_seq', 'Root1_label_node', 'Root1_match', 'Root1_match_tree', 'Root1_match_label_tree', 'Root1_prune', 'Root2_label', 'Root2_node', 'Root2_seq', 'Root2_label_node', 'Root2_match', 'Root2_match_tree', 'Root2_match_label_tree', 'Root2_prune')]<-data[c('Root2_label', 'Root2_node', 'Root2_seq', 'Root2_label_node', 'Root2_match', 'Root2_match_tree', 'Root2_match_label_tree', 'Root2_prune', 'Root1_label', 'Root1_node', 'Root1_seq', 'Root1_label_node', 'Root1_match', 'Root1_match_tree', 'Root1_match_label_tree', 'Root1_prune')]
-# }
 
 match_times1 <- as.numeric(sorttree1)
 match_times2 <- as.numeric(sorttree2)
@@ -99,6 +93,7 @@ for (iii in 1:nrow(sorttree1)) {
 
     l_tmp <- which(data$Root1_label == Chosen_Root1, arr.ind = TRUE)
     Root1_Root2 <- data[l_tmp, ]
+    # 如果 densitree 过于少，例如少于 2，则不画了
     if (nrow(Root1_Root2) < 2) {
         setTxtProgressBar(pb1, iii / nrow(sorttree1))
         next
@@ -109,7 +104,7 @@ for (iii in 1:nrow(sorttree1)) {
 
     tree1 <- Root1_Root2$Root1_node[1] # 取第一个
     tree1_seq <- Root1_Root2$Root1_seq[1] # 取第一个
-    # print(tree1)
+    # cat(tree1)
     # 设置文件路径和文件名
     file_path <- paste(output, "DensitreeALL/", nrow(Root1_Root2), "_", whichtree, "_", Chosen_Root1, "_sub_tree_celltype.nwk", sep = "")
     file_path2 <- paste(output, "DensitreeALL/", nrow(Root1_Root2), "_", whichtree, "_", Chosen_Root1, "_sub_tree.nwk", sep = "")
@@ -122,20 +117,21 @@ for (iii in 1:nrow(sorttree1)) {
 
     tree2 <- Root1_Root2$Root2_node
 
-    aaa <- tryCatch(
-        {
-            x <- read.tree(text = tree1)
-        },
-        error = function(e) {
-            # cat("ERROR :",conditionMessage(e),"\n")
-            # cat(iii, " 只有单个叶子节点，跳过~\n")
-        }
-    )
-    if (is.null(aaa)) {
-        next
-    }
-
+    # aaa <- tryCatch(
+    # {
+    #     x <- read.tree(text = tree1)
+    # },error = function(e) {})
+    # if (is.null(aaa)) {
+    #     cat("base Tree 为单节点，故终止……\n")
+    #     setTxtProgressBar(pb1, iii / nrow(sorttree1))
+    #     next()
+    # }
+    
     x <- read.tree(text = tree1)
+    if(length(x$tip.label) <= 1){
+        setTxtProgressBar(pb1, iii / nrow(sorttree1))
+        next()
+    }
     x_label <- read.tree(text = tree1_label)
 
     if (exists("mytype1")) {
@@ -174,7 +170,7 @@ for (iii in 1:nrow(sorttree1)) {
     # 消除! # Invaild edge matrix for <phylo>. A <tbl_df> is returned.
     mytable <- as.data.frame(mytable)
 
-    # print(mytable)
+    # cat(mytable)
     leaves <- pg$data[pg$data$isTip == TRUE, ]
     match_dataframe <- data.frame(y = leaves$y, base = leaves$label)
 
@@ -183,29 +179,33 @@ for (iii in 1:nrow(sorttree1)) {
     score_count <- c(0, "Score") # 统计对应的得分
     tree_seq <- c(0, tree1_seq) # 子树的原结构
 
+    #对齐标志位
+    alig_index <- 1
     for (i in 1:nrow(Root1_Root2)) {
         Root2_match_tree <- Root1_Root2$Root2_match_tree[i]
-        # print(Root2_match_tree)
+        # cat(Root2_match_tree)
         Root1_match_label_tree <- Root1_Root2$Root1_match_label_tree[i]
-        # print(Root1_match_label_tree)
+        # cat(Root1_match_label_tree)
 
-        bbb <- tryCatch(
-            {
-                x_match <- read.tree(text = Root2_match_tree)
-            },
-            error = function(e) {
-                # cat("ERROR :",conditionMessage(e),"\n")
-                # cat(iii, " 只有单个叶子节点，跳过~\n")
-            }
-        )
-        if (is.null(bbb)) {
-            next
-        }
-
+        # bbb <- tryCatch(
+        #     {
+        #         x_match <- read.tree(text = Root2_match_tree)
+        #     },
+        #     error = function(e) {
+        #         # cat("ERROR :",conditionMessage(e),"\n")
+        #         # cat(iii, " 只有单个叶子节点，跳过~\n")
+        #     }
+        # )
+        # if (is.null(bbb)) {
+        #     next
+        # }
+        
         x_match <- read.tree(text = Root2_match_tree)
-
+        if(length(x_match$tip.label) <= 1){
+            next()
+        }
         if (exists("mytype2")) {
-            # print(mytype2)
+            # cat(mytype2)
             for (j in 1:length(x_match$tip)) {
                 index <- which(mytype2[, 2] == x_match$tip.label[j], arr.in = TRUE)
                 if (length(index) == 0) {
@@ -215,18 +215,18 @@ for (iii in 1:nrow(sorttree1)) {
         }
         x_match_label <- read.tree(text = Root1_match_label_tree)
         pg_match <- ggtree(x_match, layout = mylayout, )
-        # print(pg_match$data)
+        # cat(pg_match$data)
         pg_match_label <- ggtree(x_match_label, layout = mylayout, )
-        # print(pg_match_label$data)
+        # cat(pg_match_label$data)
 
         mymatchtable <- TabelLabel(pg_match_label$data)
-        # print(mymatchtable)
+        # cat(mymatchtable)
         match_table_label <- merge(mytable[c(-1, -2, -4)], mymatchtable[c(1, 2, 3, 4)], by = "label", all.y = TRUE)
-        # print(match_table_label)
+        # cat(match_table_label)
         match_table <- merge(match_table_label[, -1], pg_match$data[c(2, 3)], by = "node", all.x = TRUE)
-        # print(match_table)
+        # cat(match_table)
         leaves_tmp <- match_table[match_table$isTip == TRUE, ][c("y", "label")]
-        # print(leaves_tmp)
+        # cat(leaves_tmp)
         colnames(leaves_tmp)[2] <- i
 
         match_dataframe <- merge(match_dataframe, leaves_tmp, by = "y", all.x = TRUE)
@@ -250,10 +250,11 @@ for (iii in 1:nrow(sorttree1)) {
                 shape = 15,
             )
         # theme(legend.position = 'none')
-        base_prune_count[i + 2] <- lengths(Root1_Root2$Root1_prune[i])
-        prune_count[i + 2] <- lengths(Root1_Root2$Root2_prune[i])
-        score_count[i + 2] <- Root1_Root2$Score[i]
-        tree_seq[i + 2] <- Root1_Root2$Root2_seq[i]
+        base_prune_count[alig_index + 2] <- lengths(Root1_Root2$Root1_prune[i])
+        prune_count[alig_index + 2] <- lengths(Root1_Root2$Root2_prune[i])
+        score_count[alig_index + 2] <- Root1_Root2$Score[i]
+        tree_seq[alig_index + 2] <- Root1_Root2$Root2_seq[i]
+        alig_index <- alig_index + 1
     }
     match_dataframe <- rbind(match_dataframe, base_prune_count, prune_count, score_count, tree_seq)
     pg + scale_color_manual(values = c(
@@ -274,9 +275,9 @@ for (iii in 1:nrow(sorttree1)) {
     ))
 
     width <- max((2.2 * match_times1[iii]), 10)
-    # print(width)
+    # cat(width)
     height <- max(nrow(match_dataframe), 15) / 1.5
-    # print(height)
+    # cat(height)
     width <- max(width, height)
     height <- max(width, height)
     filename <- paste(nrow(Root1_Root2), "_", whichtree, "-", Chosen_Root1, "_dt.pdf", sep = "")
@@ -299,7 +300,7 @@ close(pb1)
 whichtree <- "Tree2"
 sorttree1 <- sorttree2
 data[c("Root1_label", "Root1_node", "Root1_seq", "Root1_label_node", "Root1_match", "Root1_match_tree", "Root1_match_label_tree", "Root1_prune", "Root2_label", "Root2_node", "Root2_seq", "Root2_label_node", "Root2_match", "Root2_match_tree", "Root2_match_label_tree", "Root2_prune")] <- data[c("Root2_label", "Root2_node", "Root2_seq", "Root2_label_node", "Root2_match", "Root2_match_tree", "Root2_match_label_tree", "Root2_prune", "Root1_label", "Root1_node", "Root1_seq", "Root1_label_node", "Root1_match", "Root1_match_tree", "Root1_match_label_tree", "Root1_prune")]
-## 第一个位置：新建一个其实进度条
+## 第一个位置：新建一个进度条
 pb2 <- txtProgressBar(style = 3, char = ">")
 for (iii in 1:nrow(sorttree1)) {
     Chosen_Root1 <- names(sorttree1[iii])
@@ -327,20 +328,11 @@ for (iii in 1:nrow(sorttree1)) {
 
     tree2 <- Root1_Root2$Root2_node
 
-    aaa <- tryCatch(
-        {
-            x <- read.tree(text = tree1)
-        },
-        error = function(e) {
-            # cat("ERROR :",conditionMessage(e),"\n")
-            # cat(iii, " 只有单个叶子节点，跳过~\n")
-        }
-    )
-    if (is.null(aaa)) {
-        next
-    }
-
     x <- read.tree(text = tree1)
+    if(length(x$tip.label) <= 1){
+        setTxtProgressBar(pb2, iii / nrow(sorttree1))
+        next()
+    }
     x_label <- read.tree(text = tree1_label)
 
     if (exists("mytype1")) {
@@ -379,7 +371,7 @@ for (iii in 1:nrow(sorttree1)) {
     # 消除! # Invaild edge matrix for <phylo>. A <tbl_df> is returned.
     mytable <- as.data.frame(mytable)
 
-    # print(mytable)
+    # cat(mytable)
     leaves <- pg$data[pg$data$isTip == TRUE, ]
     match_dataframe <- data.frame(y = leaves$y, base = leaves$label)
 
@@ -388,28 +380,20 @@ for (iii in 1:nrow(sorttree1)) {
     score_count <- c(0, "Score") # 统计对应的得分
     tree_seq <- c(0, tree1_seq) # 子树的原结构
 
+    #对齐标志位
+    alig_index <- 1
     for (i in 1:nrow(Root1_Root2)) {
         Root2_match_tree <- Root1_Root2$Root2_match_tree[i]
-        # print(Root2_match_tree)
+        # cat(Root2_match_tree)
         Root1_match_label_tree <- Root1_Root2$Root1_match_label_tree[i]
 
-        bbb <- tryCatch(
-            {
-                x_match <- read.tree(text = Root2_match_tree)
-            },
-            error = function(e) {
-                # cat("ERROR :",conditionMessage(e),"\n")
-                # cat(iii, " 只有单个叶子节点，跳过~\n")
-            }
-        )
-        if (is.null(bbb)) {
-            next
+        x_match <- read.tree(text = Root2_match_tree)
+        if(length(x_match$tip.label) <= 1){
+            next()
         }
 
-        x_match <- read.tree(text = Root2_match_tree)
-
         if (exists("mytype2")) {
-            # print(mytype2)
+            # cat(mytype2)
             for (j in 1:length(x_match$tip)) {
                 index <- which(mytype2[, 2] == x_match$tip.label[j], arr.in = TRUE)
                 if (length(index) == 0) {
@@ -423,13 +407,13 @@ for (iii in 1:nrow(sorttree1)) {
         # pg_match_label$data
 
         mymatchtable <- TabelLabel(pg_match_label$data)
-        # print(mymatchtable)
+        # cat(mymatchtable)
         match_table_label <- merge(mytable[c(-1, -2, -4)], mymatchtable[c(1, 2, 3, 4)], by = "label", all.y = TRUE)
-        # print(match_table_label)
+        # cat(match_table_label)
         match_table <- merge(match_table_label[, -1], pg_match$data[c(2, 3)], by = "node", all.x = TRUE)
-        # print(match_table)
+        # cat(match_table)
         leaves_tmp <- match_table[match_table$isTip == TRUE, ][c("y", "label")]
-        # print(leaves_tmp)
+        # cat(leaves_tmp)
         colnames(leaves_tmp)[2] <- i
 
         match_dataframe <- merge(match_dataframe, leaves_tmp, by = "y", all.x = TRUE)
@@ -453,10 +437,11 @@ for (iii in 1:nrow(sorttree1)) {
                 shape = 15,
             )
         # theme(legend.position = 'none')
-        base_prune_count[i + 2] <- lengths(Root1_Root2$Root1_prune[i])
-        prune_count[i + 2] <- lengths(Root1_Root2$Root2_prune[i])
-        score_count[i + 2] <- Root1_Root2$Score[i]
-        tree_seq[i + 2] <- Root1_Root2$Root2_seq[i]
+        base_prune_count[alig_index + 2] <- lengths(Root1_Root2$Root1_prune[i])
+        prune_count[alig_index + 2] <- lengths(Root1_Root2$Root2_prune[i])
+        score_count[alig_index + 2] <- Root1_Root2$Score[i]
+        tree_seq[alig_index + 2] <- Root1_Root2$Root2_seq[i]
+        alig_index <- alig_index + 1
     }
     match_dataframe <- rbind(match_dataframe, base_prune_count, prune_count, score_count, tree_seq)
     pg + scale_color_manual(values = c(
@@ -476,9 +461,9 @@ for (iii in 1:nrow(sorttree1)) {
         "A" = "#a11f1f", "B" = "#0e0ea6", "C" = "#246f24", "D" = "#afaf1e", "E" = "#aa707a", "F" = "#c58204", "X" = "#5c5450"
     ))
     width <- max((2.2 * match_times2[iii]), 10)
-    # print(width)
+    # cat(width)
     height <- max(nrow(match_dataframe), 15) / 1.5
-    # print(height)
+    # cat(height)
     width <- max(width, height)
     height <- max(width, height)
     filname <- paste(nrow(Root1_Root2), "_", whichtree, "-", Chosen_Root1, "_dt.pdf", sep = "")
@@ -497,7 +482,7 @@ for (iii in 1:nrow(sorttree1)) {
 close(pb2)
 
 colnames(info) <- c("Times", "SubTree", "Filename")
-# print(info)
-write.csv(info, paste(output, "DensitreeALL/_densitrees_info.csv", sep = ""), row.names = FALSE, col.names = TRUE)
+# cat(info)
+write.csv(info, paste(output, "DensitreeALL/densitrees_info.csv", sep = ""), row.names = FALSE, col.names = TRUE)
 
-print("densitreeALL ok!!!")
+cat("densitreeALL ok!!!")

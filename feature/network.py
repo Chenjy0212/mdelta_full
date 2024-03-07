@@ -171,5 +171,5 @@ nx.draw_networkx(B,
 plt.savefig(folder + "Cluster.pdf")
 plt.close()
 
-print('[1] network ok!!!')
+print('network ok!!!')
 

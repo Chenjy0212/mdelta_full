@@ -1,18 +1,18 @@
 #!/usr/bin/env python
 # coding: utf-8
-def install(package):
-    subprocess.check_call(["pip", "install", package])
+# def install(package):
+#     subprocess.check_call(["pip", "install", package])
 
-# 要安装的包列表
-packages = ['matplotlib']
+# # 要安装的包列表
+# packages = ['matplotlib']
 
-# 循环遍历包列表，如果没有安装，则使用pip安装该包
-for package in packages:
-    try:
-        __import__(package)
-    except ImportError:
-        print(f"{package} not found. Installing...")
-        install(package)
+# # 循环遍历包列表，如果没有安装，则使用pip安装该包
+# for package in packages:
+#     try:
+#         __import__(package)
+#     except ImportError:
+#         print(f"{package} not found. Installing...")
+#         install(package)
 
 import sys
 import json
@@ -97,9 +97,6 @@ edge_color = 'black'
 #B.nodes()
 # print(node_sizeX, node_sizeY )
 
-# In[ ]:
-
-
 Edges = []
 pos = dict()
 pos.update( (n, (1, i)) for i, n in enumerate(X) )
@@ -113,7 +110,8 @@ nx.draw_networkx_nodes(B, pos, nodelist=Y, node_color=node_colorY,alpha=0.95, no
 #colors = [ B.edges[u,i]['score'] for u,i in B.edges]
 edges = nx.draw_networkx_edges(B, pos = pos, edge_color = edge_color,
         width=width, edge_cmap=plt.cm.Blues, edge_vmin = 0, alpha=0.9)
-plt.savefig(folder + "p1.pdf")
+plt.savefig(folder + "Line.pdf")
+plt.close()
 
 
 # In[ ]:
@@ -143,11 +141,8 @@ nx.draw_networkx(B,
                  cmap = plt.cm.Reds,
                  edge_color = edge_color
                 )
-plt.savefig(folder + "p2.pdf")
-
-
-# In[ ]:
-
+plt.savefig(folder + "Circle.pdf")
+plt.close()
 
 plt.figure(figsize=(min(mz, 50), min(mz, 50)))
 nx.draw_networkx(B,
@@ -173,7 +168,8 @@ nx.draw_networkx(B,
                  cmap = plt.cm.Reds,
                  edge_color = edge_color
                 )
-plt.savefig(folder + "p3.pdf")
+plt.savefig(folder + "Cluster.pdf")
+plt.close()
 
-print('[1] network ok!!!')
+print('network ok!!!')
 

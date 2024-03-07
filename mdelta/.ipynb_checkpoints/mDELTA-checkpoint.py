@@ -365,6 +365,9 @@ class MultiTree:
         return data
 
 def label_leaves_list_to_tree(label_list, tree_str):
+    #print(label_list, tree_str)
+    if len(label_list) == 1:
+        return label_list[0]
     str_tmp = ''
     flag = 0
     for i in tree_str:
@@ -455,6 +458,9 @@ def scoremat(TreeSeqFile:str,
     llldict = {}
     for index,iter in enumerate(lllnode):
         llldict[index] = [lllnode.index(i) for i in iter.son()]
+    ollldict = {}
+    for index,iter in enumerate(olllnode):
+        ollldict[index] = [olllnode.index(i) for i in iter.son()]
 
     root2.CreatTree()
     root2.Postorder_Level()
@@ -480,11 +486,16 @@ def scoremat(TreeSeqFile:str,
     lllldict = {}
     for index,iter in enumerate(llllnode):
         lllldict[index] = [llllnode.index(i) for i in iter.son()]
+    olllldict = {}
+    for index,iter in enumerate(ollllnode):
+        olllldict[index] = [ollllnode.index(i) for i in iter.son()]
 
     # print(ScoreDictFile)
+    Lflag = 0
     if ScoreDictFile != '' and ScoreDictFile != None and ScoreDictFile != 'non':
         score_dict = QuantitativeScoreFile(root1.leaves([]),root2.leaves([]), mav, miv, ScoreDictFile)
     elif LScoreDictFile != '' and LScoreDictFile != None and LScoreDictFile != 'non':
+        Lflag = 1
         # result_tmp = QuantitativeScoreFile2(root1.leaves([]),root2.leaves([]), mav, miv, ScoreDictFile1, ScoreDictFile2, pv, pp, TreeSeqFileName, TreeSeqFileName2)
         result_tmp = QuantitativeScoreFile2(root1.leaves([]),root2.leaves([]), mav, miv, LScoreDictFile)
         score_dict = result_tmp
@@ -533,19 +544,19 @@ def scoremat(TreeSeqFile:str,
                         matrix_tmp = matrix_tmp[:,lllldict[j_index]]
 
                         matrix_values[i_index][j_index] = GetMaxScore(trace=trace_value,
-                                                                        root1=lll[loop_index[0]][i],
-                                                                        root2=llll[loop_index[1]][j],
+                                                                        root1=olll[loop_index[0]][i] if Lflag == 1 else lll[loop_index[0]][i],
+                                                                        root2=ollll[loop_index[1]][j] if Lflag == 1 else llll[loop_index[1]][j],
                                                                         allmatrix = matrix_values,
                                                                         root1_index=i_index, 
                                                                         root2_index=j_index, 
                                                                         local_matrix=matrix_tmp,
-                                                                        local_matrix_root1_index = llldict[i_index],
-                                                                        local_matrix_root2_index = lllldict[j_index], 
+                                                                        local_matrix_root1_index = ollldict[i_index] if Lflag == 1 else llldict[i_index],
+                                                                        local_matrix_root2_index = olllldict[j_index] if Lflag == 1 else lllldict[j_index], 
                                                                         dict_score=score_dict,
                                                                         Algorithm=Alg,
                                                                         prune=pv,
-                                                                        lll_label = [i.label for i in lll[0]],
-                                                                        llll_label = [i.label for i in llll[0]],
+                                                                        lll_label = [i.label for i in olll[0]] if Lflag == 1 else [i.label for i in lll[0]],
+                                                                        llll_label = [i.label for i in ollll[0]] if Lflag == 1 else [i.label for i in llll[0]],
                                                                         merge = merge,)
                         pbar.update(1)
         #print(ttrace)
@@ -567,19 +578,19 @@ def scoremat(TreeSeqFile:str,
                         matrix_tmp = matrix_tmp[:,lllldict[j_index]]
 
                         matrix_values[i_index][j_index] = GetMaxScore(trace=trace_value,
-                                                                        root1=lll[loop_index[0]][i],
-                                                                        root2=llll[loop_index[1]][j],
+                                                                        root1=olll[loop_index[0]][i] if Lflag == 1 else lll[loop_index[0]][i],
+                                                                        root2=ollll[loop_index[1]][j] if Lflag == 1 else llll[loop_index[1]][j],
                                                                         allmatrix = matrix_values,
                                                                         root1_index=i_index, 
                                                                         root2_index=j_index, 
                                                                         local_matrix=matrix_tmp,
-                                                                        local_matrix_root1_index = llldict[i_index],
-                                                                        local_matrix_root2_index = lllldict[j_index], 
+                                                                        local_matrix_root1_index = ollldict[i_index] if Lflag == 1 else llldict[i_index],
+                                                                        local_matrix_root2_index = olllldict[j_index] if Lflag == 1 else lllldict[j_index], 
                                                                         dict_score=score_dict,
                                                                         Algorithm=Alg,
                                                                         prune=pv,
-                                                                        lll_label = [i.label for i in lll[0]],
-                                                                        llll_label = [i.label for i in llll[0]],
+                                                                        lll_label = [i.label for i in olll[0]] if Lflag == 1 else [i.label for i in lll[0]],
+                                                                        llll_label = [i.label for i in ollll[0]] if Lflag == 1 else [i.label for i in llll[0]],
                                                                         merge = merge,)
         #print(ttrace)
         #print(llldict)
@@ -654,7 +665,11 @@ def scoremat(TreeSeqFile:str,
             if i in match_list:
                 leaves_list_tmp.remove(i)
         return leaves_list_tmp
-    
+
+    # 判断时候为单节点
+    def single_node(old_string):
+        new_string = f'({old_string})' if ',' not in old_string else old_string
+        return new_string
     # 修正多余的树层级
     def fix_parentheses(s):
         stack = []
@@ -674,11 +689,12 @@ def scoremat(TreeSeqFile:str,
                     stack.append(node)
             else:
                 stack.append(c)
-        # if '(' in stack[0] and ')' in stack[0]:
-        #     return stack[0] + ';'
-        # else:
-        #     return '(' + stack[0] + ')' + ';'
-        return stack[0] + ';'
+
+        if '(' in stack[0] and ')' in stack[0]:
+            return stack[0] + ';'
+        else:
+            return '(' + stack[0] + ')' + ';'
+        # return stack[0] + ';'
         
     
     if top == 0: #默认情况下
@@ -847,14 +863,14 @@ def scoremat(TreeSeqFile:str,
             #print(ttused)
                 
             scorelist.append({'Score':maxscore,
-                            'Root1_label':lllnode[del_i_index].label, 
-                            'Root1_node':lllnode[del_i_index].nodeobj + ';',
-                            'Root1_seq':olllnode[del_i_index].nodeobj + ';',
-                            'Root1_label_node': label_leaves_list_to_tree(lllnode[del_i_index].leaves_label([]), lllnode[del_i_index].nodeobj) + ';',
+                            'Root1_label':lllnode[del_i_index].label,
+                            'Root1_node':single_node(lllnode[del_i_index].nodeobj) + ';',
+                            'Root1_seq':single_node(olllnode[del_i_index].nodeobj) + ';',
+                            'Root1_label_node':single_node(label_leaves_list_to_tree(lllnode[del_i_index].leaves_label([]), lllnode[del_i_index].nodeobj)) + ';',
                             'Root2_label':llllnode[del_j_index].label, 
-                            'Root2_node':llllnode[del_j_index].nodeobj + ';', 
-                            'Root2_seq':ollllnode[del_j_index].nodeobj + ';', 
-                            'Root2_label_node': label_leaves_list_to_tree(llllnode[del_j_index].leaves_label([]), llllnode[del_j_index].nodeobj) + ';',
+                            'Root2_node':single_node(llllnode[del_j_index].nodeobj) + ';', 
+                            'Root2_seq':single_node(ollllnode[del_j_index].nodeobj) + ';', 
+                            'Root2_label_node':single_node(label_leaves_list_to_tree(llllnode[del_j_index].leaves_label([]), llllnode[del_j_index].nodeobj)) + ';',
                             'Root1_match': list_tmp1,
                             'Root2_match': list_tmp2,
                             # 'Root1_match_tree': '(' + ''.join(tree_tmp1) + ');',
@@ -996,20 +1012,20 @@ def get_rmatrix(tree1seq: str, tree2seq: str, queue, score_dict, rclist):
                 matrix_tmp = matrix_tmp[:,lllldict[j_index]]
 
                 matrix_values[i_index][j_index] = GetMaxScore(trace=trace_value,
-                                                                root1=lll[loop_index[0]][i],
-                                                                root2=llll[loop_index[1]][j],
-                                                                allmatrix = matrix_values,
-                                                                root1_index=i_index, 
-                                                                root2_index=j_index, 
-                                                                local_matrix=matrix_tmp,
-                                                                local_matrix_root1_index = llldict[i_index],
-                                                                local_matrix_root2_index = lllldict[j_index], 
-                                                                dict_score=score_dict,
-                                                                Algorithm=Alg,
-                                                                prune=pv,
-                                                                lll_label = [i.label for i in lll[0]],
-                                                                llll_label = [i.label for i in llll[0]],
-                                                                merge = merge,)
+                                                                        root1=olll[loop_index[0]][i] if Lflag == 1 else lll[loop_index[0]][i],
+                                                                        root2=ollll[loop_index[1]][j] if Lflag == 1 else llll[loop_index[1]][j],
+                                                                        allmatrix = matrix_values,
+                                                                        root1_index=i_index, 
+                                                                        root2_index=j_index, 
+                                                                        local_matrix=matrix_tmp,
+                                                                        local_matrix_root1_index = ollldict[i_index] if Lflag == 1 else llldict[i_index],
+                                                                        local_matrix_root2_index = olllldict[j_index] if Lflag == 1 else lllldict[j_index], 
+                                                                        dict_score=score_dict,
+                                                                        Algorithm=Alg,
+                                                                        prune=pv,
+                                                                        lll_label = [i.label for i in olll[0]] if Lflag == 1 else [i.label for i in lll[0]],
+                                                                        llll_label = [i.label for i in ollll[0]] if Lflag == 1 else [i.label for i in llll[0]],
+                                                                        merge = merge,)
     # print(matrix_values)
     topNscore = []
     for rc in rclist:
@@ -1156,5 +1172,5 @@ if __name__ == '__main__':
     
     time_end = time.time()  # 记录结束时间
     time_sum = time_end - time_start  # 计算的时间差为程序的执行时间，单位为秒/s
-    print('程序总共运行时间为:'+ str(time_sum) + 's')
+    print('The total running time of the mDELTA algorithm: ', str(time_sum) + 's')
     

@@ -22,8 +22,8 @@ suppressMessages(library(treeio))
 suppressMessages(library(dplyr))
 
 if (!is.na(args[1]) && args[1] != "") {
-    data <- jsonlite::stream_in(file(args[1]))
-    # print(args[1])
+    suppressMessages(data <- jsonlite::stream_in(file(args[1]), verbose = FALSE))
+    # cat(args[1])
 }
 if (!is.na(args[2]) && args[2] != "" && args[2] != "non") {
     output <- args[2]
@@ -33,17 +33,17 @@ if (!is.na(args[2]) && args[2] != "" && args[2] != "non") {
 
 folder_path <- paste(output, "DensitreeBEST", sep = "")
 if (!dir.exists(folder_path)) {
-    # print(paste('创建新文件夹: ',output,'DensitreeBEST', sep=""))
+    # cat(paste('创建新文件夹: ',output,'DensitreeBEST', sep=""))
     # 如果文件夹不存在，则创建文件夹
     dir.create(folder_path)
-    # print("文件夹已创建")
+    # cat("文件夹已创建")
 }
 
 # data
 
 sorttree1 <- sort(table(data$Root1_label), decreasing = TRUE)
 sorttree2 <- sort(table(data$Root2_label), decreasing = TRUE)
-# print(sorttree1)
+# cat(sorttree1)
 
 whichtree <- "Tree1"
 if (max(sorttree2) >= max(sorttree1)) {
@@ -75,7 +75,23 @@ file_path2 <- paste(output, "DensitreeBEST/", "BEST_", nrow(Root1_Root2), "_", w
 tree1_label <- Root1_Root2$Root1_label_node[1]
 
 tree2 <- Root1_Root2$Root2_node
+
+# aaa <- tryCatch(
+#     {
+#         x <- read.tree(text = tree1)
+#     },
+#     error = function(e) {})
+# if (is.null(aaa)) {
+#     cat("Densitree Best Warning: base Tree 为单节点，故终止……\n")
+#     q()
+# }
+
 x <- read.tree(text = tree1)
+if(length(x$tip.label) <= 1){
+    cat("Densitree Best Warning: base Tree 为单节点，故终止……\n")
+    q()
+}
+
 x_label <- read.tree(text = tree1_label)
 
 if (exists("mytype1")) {
@@ -150,7 +166,7 @@ TabelLabel <- function(atabel) {
         # 父节点为当前节点的，为根节点
     }
     rootindex <- which(is.na(atabel$label) == "TRUE")
-    # print(rootindex)
+    # cat(rootindex)
     atabel[rootindex, ]$label <- "root"
     atabel
 }
@@ -159,7 +175,7 @@ mytable <- TabelLabel(pg_label$data)
 # 消除! # Invaild edge matrix for <phylo>. A <tbl_df> is returned.
 mytable <- as.data.frame(mytable)
 
-# print(mytable)
+# cat(mytable)
 leaves <- pg$data[pg$data$isTip == TRUE, ]
 match_dataframe <- data.frame(y = leaves$y, base = leaves$label)
 
@@ -170,13 +186,13 @@ tree_seq <- c(0, tree1_seq) # 子树的原结构
 
 for (i in 1:nrow(Root1_Root2)) {
     Root2_match_tree <- Root1_Root2$Root2_match_tree[i]
-    # print(Root2_match_tree)
+    # cat(Root2_match_tree)
     Root1_match_label_tree <- Root1_Root2$Root1_match_label_tree[i]
     # Root1_match_label_tree = '(0,(1_0,1_1));'
     x_match <- read.tree(text = Root2_match_tree)
 
     if (exists("mytype2")) {
-        # print(mytype2)
+        # cat(mytype2)
         for (j in 1:length(x_match$tip)) {
             index <- which(mytype2[, 2] == x_match$tip.label[j], arr.in = TRUE)
             if (length(index) == 0) {
@@ -190,13 +206,13 @@ for (i in 1:nrow(Root1_Root2)) {
     # pg_match_label$data
 
     mymatchtable <- TabelLabel(pg_match_label$data)
-    # print(mymatchtable)
+    # cat(mymatchtable)
     match_table_label <- merge(mytable[c(-1, -2, -4)], mymatchtable[c(1, 2, 3, 4)], by = "label", all.y = TRUE)
-    # print(match_table_label)
+    # cat(match_table_label)
     match_table <- merge(match_table_label[, -1], pg_match$data[c(2, 3)], by = "node", all.x = TRUE)
-    # print(match_table)
+    # cat(match_table)
     leaves_tmp <- match_table[match_table$isTip == TRUE, ][c("y", "label")]
-    # print(leaves_tmp)
+    # cat(leaves_tmp)
     colnames(leaves_tmp)[2] <- i
 
     match_dataframe <- merge(match_dataframe, leaves_tmp, by = "y", all.x = TRUE)
@@ -227,7 +243,7 @@ for (i in 1:nrow(Root1_Root2)) {
     tree_seq[i + 2] <- Root1_Root2$Root2_seq[i]
 }
 match_dataframe <- rbind(match_dataframe, base_prune_count, prune_count, score_count, tree_seq)
-# print(match_dataframe)
+# cat(match_dataframe)
 pg <- pg + scale_color_manual(values = c(
     "C3" = "#A6CEE3",
     "C1" = "#1F78B4",
@@ -246,16 +262,16 @@ pg <- pg + scale_color_manual(values = c(
 ))
 
 width <- max((2.2 * max(sorttree1)), 10)
-# print(width)
+# cat(width)
 height <- max(nrow(match_dataframe), 15) / 1.5
-# print(height)
+# cat(height)
 width <- max(width, height)
 height <- max(width, height)
-# print(width)
-# print(height)
+# cat(width)
+# cat(height)
 ggsave(filename = paste(output, "DensitreeBEST/", "BEST_", nrow(Root1_Root2), "_dt.pdf", sep = ""), width = width, height = height, limitsize = FALSE)
 
 fileout <- paste(output, "DensitreeBEST/", "BEST_", nrow(Root1_Root2), "_densitree_leaves_match.csv", sep = "")
 write.csv(match_dataframe[order(match_dataframe$y, decreasing = TRUE), ][c(-1)], fileout, row.names = FALSE)
 
-print("densitreeBEST ok!!!")
+cat("densitreeBEST ok!!!\n")

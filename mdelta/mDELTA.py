@@ -365,6 +365,9 @@ class MultiTree:
         return data
 
 def label_leaves_list_to_tree(label_list, tree_str):
+    #print(label_list, tree_str)
+    if len(label_list) == 1:
+        return label_list[0]
     str_tmp = ''
     flag = 0
     for i in tree_str:
@@ -662,7 +665,11 @@ def scoremat(TreeSeqFile:str,
             if i in match_list:
                 leaves_list_tmp.remove(i)
         return leaves_list_tmp
-    
+
+    # 判断时候为单节点
+    def single_node(old_string):
+        new_string = f'({old_string})' if ',' not in old_string else old_string
+        return new_string
     # 修正多余的树层级
     def fix_parentheses(s):
         stack = []
@@ -682,11 +689,12 @@ def scoremat(TreeSeqFile:str,
                     stack.append(node)
             else:
                 stack.append(c)
-        # if '(' in stack[0] and ')' in stack[0]:
-        #     return stack[0] + ';'
-        # else:
-        #     return '(' + stack[0] + ')' + ';'
-        return stack[0] + ';'
+
+        if '(' in stack[0] and ')' in stack[0]:
+            return stack[0] + ';'
+        else:
+            return '(' + stack[0] + ')' + ';'
+        # return stack[0] + ';'
         
     
     if top == 0: #默认情况下
@@ -855,14 +863,14 @@ def scoremat(TreeSeqFile:str,
             #print(ttused)
                 
             scorelist.append({'Score':maxscore,
-                            'Root1_label':lllnode[del_i_index].label, 
-                            'Root1_node':lllnode[del_i_index].nodeobj + ';',
-                            'Root1_seq':olllnode[del_i_index].nodeobj + ';',
-                            'Root1_label_node': label_leaves_list_to_tree(lllnode[del_i_index].leaves_label([]), lllnode[del_i_index].nodeobj) + ';',
+                            'Root1_label':lllnode[del_i_index].label,
+                            'Root1_node':single_node(lllnode[del_i_index].nodeobj) + ';',
+                            'Root1_seq':single_node(olllnode[del_i_index].nodeobj) + ';',
+                            'Root1_label_node':single_node(label_leaves_list_to_tree(lllnode[del_i_index].leaves_label([]), lllnode[del_i_index].nodeobj)) + ';',
                             'Root2_label':llllnode[del_j_index].label, 
-                            'Root2_node':llllnode[del_j_index].nodeobj + ';', 
-                            'Root2_seq':ollllnode[del_j_index].nodeobj + ';', 
-                            'Root2_label_node': label_leaves_list_to_tree(llllnode[del_j_index].leaves_label([]), llllnode[del_j_index].nodeobj) + ';',
+                            'Root2_node':single_node(llllnode[del_j_index].nodeobj) + ';', 
+                            'Root2_seq':single_node(ollllnode[del_j_index].nodeobj) + ';', 
+                            'Root2_label_node':single_node(label_leaves_list_to_tree(llllnode[del_j_index].leaves_label([]), llllnode[del_j_index].nodeobj)) + ';',
                             'Root1_match': list_tmp1,
                             'Root2_match': list_tmp2,
                             # 'Root1_match_tree': '(' + ''.join(tree_tmp1) + ');',
