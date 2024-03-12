@@ -17,14 +17,14 @@ bottom_right_slider = IntSlider(description='Bottom right', layout=Layout(width=
 top_left_file = widgets.Textarea(layout=Layout(width='auto', height='auto'))
 top_right_file = widgets.Textarea(layout=Layout(width='auto', height='auto'))
 bottom_left_upload = widgets.Combobox(layout=Layout(width='auto', height='auto'))
-bottom_right_upload = widgets.Combobox(layout=Layout(width='auto', height='auto'))
+bottom_right_upload = widgets.Combobox(layout=Layout(width='auto', height='auto')) 
 
 def f(x):
     return x
 
 def get_default():
     #展示logo
-    img1 = open("/home/ee_while/mdelta/image/mlogo.png", "rb")
+    img1 = open("./image/mlogo.png", "rb")
     logoimage = img1.read()
     logo = widgets.Image(
         value= logoimage,
@@ -35,7 +35,7 @@ def get_default():
     display(logo)
     
     #匹配流程图
-    img2 = open("/home/ee_while/mdelta/image/mDELTA.png", "rb")
+    img2 = open("./image/mDELTA.png", "rb")
     mDELTAimage = img2.read()
     img_mDELTA = widgets.Image(
         value=mDELTAimage,
@@ -44,14 +44,14 @@ def get_default():
         height='auto',
     )
     #中山大学
-    img3 = open("/home/ee_while/mdelta/image/sysulogo.png", "rb")
-    sysulogoimage = img3.read()
-    # sysulogo = widgets.Image(
-    #     value = sysulogoimage,
-    #     format='png',
-    #     width='auto',
-    #     height='auto',
-    # )
+    img3 = open("./image/mdelta_algorithm.png", "rb")
+    algorithmimage = img3.read()
+    mdelta_algorithm = widgets.Image(
+        value = algorithmimage,
+        format='png',
+        width='auto',
+        height='auto',
+    )
     how = widgets.HTML(
         value = """
 <h1>Positional arguments</h1>
@@ -98,7 +98,7 @@ def get_default():
 </tr>
 
 <tr>
-<td> -sd SCOREDICTFILE, <br>--ScoreDictFile SCOREDICTFILE </td>
+<td> -xsd XSCOREDICTFILE, <br>--ScoreDictFile SCOREDICTFILE </td>
 <td> [path/filename] </td> 
 <td> A comma-delimited text file used to
                         determine similarity scores between cells. If there
@@ -114,22 +114,11 @@ def get_default():
 </tr>
 
 <tr>
-<td> -sd1 SCOREDICTFILE1, <br>--ScoreDictFile1 SCOREDICTFILE1 </td>
+<td> -lsd LSCOREDICTFILE1, <br>--ScoreDictFile1 SCOREDICTFILE1 </td>
 <td> [path/filename] </td> 
-<td> Type to Type Score file tree #1. </td>
+<td> Calculate the Euclidean distance based on the characteristics of the cell (such as gene expression) to obtain the result x, and obtain the corresponding score through a series of operations such as - ln (x+1). </td>
 </tr>
 
-<tr>
-<td> -sd2 SCOREDICTFILE2, <br>--ScoreDictFile2 SCOREDICTFILE2 </td>
-<td> [path/filename] </td> 
-<td> Type to Type Score file tree #2. </td>
-</tr>
-
-<tr>
-<td> -pp PRUNEPERCENT, <br>--PrunePercent PRUNEPERCENT </td>
-<td> [float] </td> 
-<td> In quantitative calculations, the percentage taken. </td>
-</tr>
 
 <tr>
 <td> -t TOP, --top TOP </td>
@@ -223,7 +212,7 @@ def get_default():
 <br>
 <div> 
     More details on :
-    <a href='https://github.com/Chenjy0212/modelta' style='display: flex' target="_blank"> 
+    <a href='https://github.com/Chenjy0212/mdelta_full' style='display: flex' target="_blank"> 
         <h1 style='color: red'>M </h1>
         <h1 style='color: orange'>D </h1>
         <h1 style='color: green'>E </h1>
@@ -283,14 +272,17 @@ def get_default():
     # TreeSeqFile.value = '/home/ee_while/TreeFile_nwk/Example_CLT_1.nwk'
     # TreeSeqFile2.value = '/home/ee_while/TreeFile_nwk/Example_CLT_2.nwk'
     #默认值的选项目列表
-    TreeSeqFileList = ['/home/ee_while/TreeFile_nwk/Example_CLT_1.nwk',
-                      '/home/ee_while/TreeFile_nwk/Example_CLT_2.nwk',
-                      '/home/ee_while/TreeFile_nwk/a1_cbrad5_onecell.nwk',
-                      '/home/ee_while/TreeFile_nwk/e5_hesc_onecell.nwk',
-                      '/home/ee_while/TreeFile_nwk/f11_hesc_onecell.nwk',
-                      '/home/ee_while/TreeFile_nwk/g11_cbrad5_onecell.nwk',
-                      '/home/ee_while/TreeFile_nwk/g2_cbrad5_onecell.nwk',
-                      '/home/ee_while/TreeFile_nwk/gs_hesc_onecell.nwk',]
+    # TreeSeqFileList = ['/home/ee_while/TreeFile_nwk/Example_CLT_1.nwk',
+    #                   '/home/ee_while/TreeFile_nwk/Example_CLT_2.nwk',
+    #                   '/home/ee_while/TreeFile_nwk/a1_cbrad5_onecell.nwk',
+    #                   '/home/ee_while/TreeFile_nwk/e5_hesc_onecell.nwk',
+    #                   '/home/ee_while/TreeFile_nwk/f11_hesc_onecell.nwk',
+    #                   '/home/ee_while/TreeFile_nwk/g11_cbrad5_onecell.nwk',
+    #                   '/home/ee_while/TreeFile_nwk/g2_cbrad5_onecell.nwk',
+    #                   '/home/ee_while/TreeFile_nwk/gs_hesc_onecell.nwk',]
+    TreeSeqFileList = ['ExampleFile/tree1.nwk',
+                      'ExampleFile/tree2.nwk',
+                      ]
     TreeSeqFile.options = TreeSeqFileList
     TreeSeqFile2.options = TreeSeqFileList
     #合在一起
@@ -310,11 +302,13 @@ def get_default():
     #Name2TypeFile.value = "/mnt/data5/disk/ee_while/mdelta/ExampleFile/Name2Type.csv"
     #Name2TypeFile2.value = "/mnt/data5/disk/ee_while/mdelta/ExampleFile/Name2Type.csv"
     #默认值的选项目列表
-    Name2TypeFileist = ['/mnt/data5/disk/ee_while/mdelta/ExampleFile/Name2Type.csv',
-                      '/home/ee_while/JOB220429/a1_cbrad5/A1_CBRAD5_newNAME2CLASS.csv',
-                      '/home/ee_while/JOB220429/g11_cbrad5/G11_CBRAD5_newNAME2CLASS.csv',
-                      '/home/ee_while/JOB220429/g2_cbrad5/G2_CBRAD5_newNAME2CLASS.csv',
-                      '/home/ee_while/JOB220429/gs_hesc/GS_HESC_newNAME2CLASS.csv',]
+    # Name2TypeFileist = ['/mnt/data5/disk/ee_while/mdelta/ExampleFile/Name2Type.csv',
+    #                   '/home/ee_while/JOB220429/a1_cbrad5/A1_CBRAD5_newNAME2CLASS.csv',
+    #                   '/home/ee_while/JOB220429/g11_cbrad5/G11_CBRAD5_newNAME2CLASS.csv',
+    #                   '/home/ee_while/JOB220429/g2_cbrad5/G2_CBRAD5_newNAME2CLASS.csv',
+    #                   '/home/ee_while/JOB220429/gs_hesc/GS_HESC_newNAME2CLASS.csv',]
+    Name2TypeFileist = ['ExampleFile/Name2Type.csv',
+                      ]
     Name2TypeFile.options = Name2TypeFileist
     Name2TypeFile2.options = Name2TypeFileist
     #合在一起
@@ -327,8 +321,7 @@ def get_default():
     #空白时候的提示
     XScoreDictFile.placeholder = '请在此输入文件名或文件路径，或者在最右方点击选择'
     #默认值的选项目列表
-    ScoreDictFileist = ['/home/ee_while/mdelta/ExampleFile/scorefile.csv',
-                      '/home/ee_while/mdelta/ExampleFile/TTS_test.csv',
+    ScoreDictFileist = ['ExampleFile/Xscorefile.csv',
                        ]
     XScoreDictFile.options = ScoreDictFileist
     #合在一起
@@ -336,7 +329,7 @@ def get_default():
     
     #定量计算
     #默认值的选项目列表
-    LScoreDictFileist = ['/home/ee_while/mdelta/ExampleFile/Qscorefile.csv']
+    LScoreDictFileist = ['ExampleFile/Lscorefile.csv']
                         # '/home/ee_while/JOB220901/A1.csv',
                         # '/home/ee_while/JOB220901/G2.csv',
                         # '/home/ee_while/JOB220901/G11.csv',
@@ -363,25 +356,25 @@ def get_default():
     
     #mav
     mav1 = widgets.FloatRangeSlider(value=(2.0, 2.0), description='mav', min = 0.0, max= 10.0, layout=Layout(width='auto', height='auto'))
-    mavstep = widgets.FloatSlider(value=1.0, min = 0.01, max= 10.0, description='mav_step', layout=Layout(width='auto', height='auto'))
+    mavstep = widgets.FloatSlider(value=1.0, min = 0.1, max= 10.0, description='mav_step', layout=Layout(width='auto', height='auto'))
     #合在一起
     mav = widgets.VBox([mav1, mavstep])
     
     #miv
     miv1 = widgets.FloatRangeSlider(value = (-1.0, -1.0), description='miv', min= -10.0, max = 0.0, layout=Layout(width='auto', height='auto'))
-    mivstep = widgets.FloatSlider(value=1.0, min = 0.01, max= 10.0, description='miv_step', layout=Layout(width='auto', height='auto'))
+    mivstep = widgets.FloatSlider(value=1.0, min = 0.1, max= 10.0, description='miv_step', layout=Layout(width='auto', height='auto'))
     #合在一起
     miv = widgets.VBox([miv1, mivstep])
     
     #merge
     merge1 = widgets.FloatRangeSlider(value = (100., 100.), description='merge', min= 0.0, max = 100.0, layout=Layout(width='auto', height='auto'))
-    mergestep = widgets.FloatSlider(value=1.0, min = 0.01, max= 10.0, description='merge_step', layout=Layout(width='auto', height='auto'))
+    mergestep = widgets.FloatSlider(value=1.0, min = 0.1, max= 10.0, description='merge_step', layout=Layout(width='auto', height='auto'))
     #合在一起
     merge = widgets.VBox([merge1, mergestep])
     
     #prune
     p1 = widgets.FloatRangeSlider(value = (-1.0, -1.0), description='prune | p', min= -10.0, max = 0.0, layout=Layout(width='auto', height='auto'))
-    pstep = widgets.FloatSlider(value=1.0, min = 0.01, max= 10.0, description='p_step', layout=Layout(width='auto', height='auto'))
+    pstep = widgets.FloatSlider(value=1.0, min = 0.1, max= 10.0, description='p_step', layout=Layout(width='auto', height='auto'))
     #合在一起
     p = widgets.VBox([p1, pstep])
     
@@ -400,7 +393,7 @@ def get_default():
         indent=False)
     
     #输出的路径
-    output = widgets.Text(description = '保存路径', devalue='', placeholder = '默认为当前目录，可输入文件夹绝对或相对路径名称，eg： /home/user/result/ or /home/user/result or result or result/', layout=Layout(width='auto', height='auto'))
+    output = widgets.Text(description = '保存路径', value='result', placeholder = '默认为当前目录下的 result文件夹下，可输入文件夹绝对或相对路径名称，eg： /home/user/result/ or /home/user/result or result or result/', layout=Layout(width='auto', height='auto'))
     
     #不同于前N项最优匹配的序列百分比
     diff1 = widgets.IntRangeSlider(value =(0, 0), description='diff | x', min = 0.0, max= 100.0, layout=Layout(width='auto', height='auto'))
@@ -490,14 +483,14 @@ def get_default():
     tab_nest.children = [menu1,
                          menu2, 
                          img_mDELTA,
-                         # sysulogo,
+                         mdelta_algorithm,
                          how
                         ]
     tab_nest.set_title(0, '菜单—类型1')
     tab_nest.set_title(1, '菜单—类型2')
-    tab_nest.set_title(2, '匹配示例图')
-    #tab_nest.set_title(3, 'mDELTA使用流程图')
-    tab_nest.set_title(3, '参数示意图')
+    tab_nest.set_title(2, 'mdleta 匹配示例图')
+    tab_nest.set_title(3, 'mDELTA 得分矩阵图')
+    tab_nest.set_title(4, '参数解析')
     display(tab_nest)
     
     #if positional.top_left.value in TreeSeqFileList:
@@ -532,12 +525,12 @@ def get_default():
         'o':output,
         'PERM':P1,
         'CPU':cpus,
-        'mdelta':'/home/ee_while/mdelta/mdelta/mDELTA.py',
-        # 'MND': '/home/ee_while/JOB230605/draw.py',
-        'match_tree': '/home/ee_while/JOB230605/match_tree.r',
-        'network': '/home/ee_while/JOB230605/network.py',
-        'densitree':'/home/ee_while/JOB230605/densitree.r',
-        'da':'/home/ee_while/JOB230605/densitreeALL.r'
+        'mdelta':'./mdelta/mDELTA.py',
+        # 'MND': './feature/draw.py',
+        'match_tree': './feature/match_tree.r',
+        'network': './feature/network.py',
+        'densitree':'./feature/densitree.r',
+        'da':'./feature/densitreeALL.r'
            }
 
 def forlist(start, end, step):

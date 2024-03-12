@@ -139,28 +139,6 @@ pb <- txtProgressBar(style = 3, char = ">")
 defeat_list <- c()
 
 for (Position in 1:nrow(data)) {
-    # 选取第几个
-    # Position=5
-    # cat(Position)
-    # data$Root1_match_label_tree[Position]
-    # data$Root1_label_node[Position]
-    # data$Root1_node[Position]
-
-    # aaa <- tryCatch(
-    #     {
-    #         x <- read.tree(text = data$Root1_node[Position])
-    #         y <- read.tree(text = data$Root2_node[Position])
-    #     },
-    #     error = function(e) {
-    #         # cat("ERROR :",conditionMessage(e),"\n")
-    #         # cat(Position, " 只有单个叶子节点，跳过~\n")
-    #     }
-    # )
-    # if (is.null(aaa)) {
-    #     setTxtProgressBar(pb, Position / nrow(data))
-    #     defeat_list <- c(defeat_list, Position)
-    #     next
-    # }
 
     x <- read.tree(text = data$Root1_node[Position])
     y <- read.tree(text = data$Root2_node[Position])

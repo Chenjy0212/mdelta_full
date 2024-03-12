@@ -356,25 +356,25 @@ def get_default():
     
     #mav
     mav1 = widgets.FloatRangeSlider(value=(2.0, 2.0), description='mav', min = 0.0, max= 10.0, layout=Layout(width='auto', height='auto'))
-    mavstep = widgets.FloatSlider(value=1.0, min = 0.01, max= 10.0, description='mav_step', layout=Layout(width='auto', height='auto'))
+    mavstep = widgets.FloatSlider(value=1.0, min = 0.1, max= 10.0, description='mav_step', layout=Layout(width='auto', height='auto'))
     #合在一起
     mav = widgets.VBox([mav1, mavstep])
     
     #miv
     miv1 = widgets.FloatRangeSlider(value = (-1.0, -1.0), description='miv', min= -10.0, max = 0.0, layout=Layout(width='auto', height='auto'))
-    mivstep = widgets.FloatSlider(value=1.0, min = 0.01, max= 10.0, description='miv_step', layout=Layout(width='auto', height='auto'))
+    mivstep = widgets.FloatSlider(value=1.0, min = 0.1, max= 10.0, description='miv_step', layout=Layout(width='auto', height='auto'))
     #合在一起
     miv = widgets.VBox([miv1, mivstep])
     
     #merge
     merge1 = widgets.FloatRangeSlider(value = (100., 100.), description='merge', min= 0.0, max = 100.0, layout=Layout(width='auto', height='auto'))
-    mergestep = widgets.FloatSlider(value=1.0, min = 0.01, max= 10.0, description='merge_step', layout=Layout(width='auto', height='auto'))
+    mergestep = widgets.FloatSlider(value=1.0, min = 0.1, max= 10.0, description='merge_step', layout=Layout(width='auto', height='auto'))
     #合在一起
     merge = widgets.VBox([merge1, mergestep])
     
     #prune
     p1 = widgets.FloatRangeSlider(value = (-1.0, -1.0), description='prune | p', min= -10.0, max = 0.0, layout=Layout(width='auto', height='auto'))
-    pstep = widgets.FloatSlider(value=1.0, min = 0.01, max= 10.0, description='p_step', layout=Layout(width='auto', height='auto'))
+    pstep = widgets.FloatSlider(value=1.0, min = 0.1, max= 10.0, description='p_step', layout=Layout(width='auto', height='auto'))
     #合在一起
     p = widgets.VBox([p1, pstep])
     
@@ -393,7 +393,7 @@ def get_default():
         indent=False)
     
     #输出的路径
-    output = widgets.Text(description = '保存路径', devalue='result', placeholder = '默认为当前目录，可输入文件夹绝对或相对路径名称，eg： /home/user/result/ or /home/user/result or result or result/', layout=Layout(width='auto', height='auto'))
+    output = widgets.Text(description = '保存路径', value='result', placeholder = '默认为当前目录下的 result文件夹下，可输入文件夹绝对或相对路径名称，eg： /home/user/result/ or /home/user/result or result or result/', layout=Layout(width='auto', height='auto'))
     
     #不同于前N项最优匹配的序列百分比
     diff1 = widgets.IntRangeSlider(value =(0, 0), description='diff | x', min = 0.0, max= 100.0, layout=Layout(width='auto', height='auto'))
