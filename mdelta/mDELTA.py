@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-#20220920
 import os
 import os.path
 from ReadFile import *
@@ -269,7 +268,7 @@ class MultiTree:
                     self.right = MultiTree(item,label=label)
                     self = self.right
                     self.CreatTree()
-    #赋层左子树后序遍历找出最大层级d
+    #赋层左子树后序遍历找出最大层级
     def Posorder_Max_Level(self):
         level = self.level;
         while self.right:
@@ -449,6 +448,8 @@ def scoremat(TreeSeqFile:str,
     oroot1.Postorder_Level()
     olll = oroot1.nodes({}) #二维表示
     olllnode = [j for i in olll for j in i]
+    olllnode_obj = [j.nodeobj for i in olll for j in i]
+    olllnode_label = [j.label for i in olll for j in i]
     # get orignal root1 leaves' new label to celltype infos
     oroot1_label2celltype = leafLable_to_celltype_info(olllnode)
 
@@ -477,6 +478,8 @@ def scoremat(TreeSeqFile:str,
     oroot2.Postorder_Level()
     ollll = oroot2.nodes({}) #二维表示
     ollllnode = [j for i in ollll for j in i]
+    ollllnode_obj = [j.nodeobj for i in ollll for j in i]
+    ollllnode_label = [j.label for i in ollll for j in i]
     # get orignal root2 leaves' new label to celltype infos
     oroot2_label2celltype = leafLable_to_celltype_info(ollllnode)
 
@@ -493,11 +496,10 @@ def scoremat(TreeSeqFile:str,
     # print(ScoreDictFile)
     Lflag = 0
     if ScoreDictFile != '' and ScoreDictFile != None and ScoreDictFile != 'non':
-        score_dict = QuantitativeScoreFile(root1.leaves([]),root2.leaves([]), mav, miv, ScoreDictFile)
+        score_dict = QualitativeScoreFile(root1.leaves([]),root2.leaves([]), mav, miv, ScoreDictFile)
     elif LScoreDictFile != '' and LScoreDictFile != None and LScoreDictFile != 'non':
         Lflag = 1
-        # result_tmp = QuantitativeScoreFile2(root1.leaves([]),root2.leaves([]), mav, miv, ScoreDictFile1, ScoreDictFile2, pv, pp, TreeSeqFileName, TreeSeqFileName2)
-        result_tmp = QuantitativeScoreFile2(root1.leaves([]),root2.leaves([]), mav, miv, LScoreDictFile)
+        result_tmp = QuantitativeScoreFile(oroot1.leaves([]),oroot2.leaves([]), mav, miv, LScoreDictFile)
         score_dict = result_tmp
     else:
         score_dict = Scoredict(root1.leaves([]),root2.leaves([]), mav, miv)
@@ -672,6 +674,7 @@ def scoremat(TreeSeqFile:str,
         return new_string
     # 修正多余的树层级
     def fix_parentheses(s):
+        # print(s)
         stack = []
         for c in s:
             if c == ')':
@@ -714,8 +717,9 @@ def scoremat(TreeSeqFile:str,
         tree_tmp1_2 = []
         tree_tmp2_2 = []
         mat_tmp2[-1,-1] = -99999.
+        
         getmatchtree([-1,-1],lllnode_obj, llllnode_obj, trace_value, mat_tmp2, tree_tmp1, tree_tmp2)
-        getmatchtree([-1,-1], lllnode_obj, llllnode_obj, trace_value, mat_tmp2, tree_tmp1_2, tree_tmp2_2)
+        getmatchtree([-1,-1], olllnode_obj, ollllnode_obj, trace_value, mat_tmp2, tree_tmp1_2, tree_tmp2_2)
         #tree_tmp1.append(';')
         #tree_tmp2.append(';')
         
@@ -727,7 +731,7 @@ def scoremat(TreeSeqFile:str,
         tree_tmp4_2 = []
         mat_tmp3[-1,-1] = -99999.
         getmatchtree([-1,-1],lllnode_label, llllnode_label, trace_value,mat_tmp3, tree_tmp3, tree_tmp4)
-        getmatchtree([-1,-1],lllnode_label, llllnode_label, trace_value,mat_tmp3_2, tree_tmp3_2, tree_tmp4_2)
+        getmatchtree([-1,-1],olllnode_label, ollllnode_label, trace_value,mat_tmp3_2, tree_tmp3_2, tree_tmp4_2)
         #tree_tmp3.append(';')
         #tree_tmp4.append(';')
         
@@ -802,7 +806,7 @@ def scoremat(TreeSeqFile:str,
             tree_tmp2_2 = []
             mat_tmp2[del_i_index,del_j_index] = -99999.
             getmatchtree([del_i_index,del_j_index],lllnode_obj, llllnode_obj, trace_value,mat_tmp2, tree_tmp1, tree_tmp2)
-            # getmatchtree([del_i_index,del_j_index], llllnode_obj, lllnode_obj, trace_value,mat_tmp2_2, tree_tmp2_2, tree_tmp1_2)
+            getmatchtree([del_i_index,del_j_index], olllnode_obj, ollllnode_obj, trace_value,mat_tmp2_2, tree_tmp1_2, tree_tmp2_2)
            
             tree_tmp3 = []
             tree_tmp4 = []
@@ -810,7 +814,7 @@ def scoremat(TreeSeqFile:str,
             tree_tmp4_2 = []
             mat_tmp3[del_i_index,del_j_index] = -99999.
             getmatchtree([del_i_index,del_j_index],lllnode_label, llllnode_label, trace_value,mat_tmp3, tree_tmp3, tree_tmp4)
-            # getmatchtree([del_i_index,del_j_index], llllnode_label,lllnode_label, trace_value,mat_tmp3_2, tree_tmp4_2, tree_tmp3_2)
+            getmatchtree([del_i_index,del_j_index], olllnode_label,ollllnode_label, trace_value,mat_tmp3_2, tree_tmp3_2, tree_tmp4_2)
             
             #if list_tmp1[0] != lllnode[del_i_index].label:
             #    list_tmp1.insert(0,lllnode[del_i_index].label)
@@ -841,7 +845,7 @@ def scoremat(TreeSeqFile:str,
                     tree_tmp2_2 = []
                     mat_tmp2[del_i_index,del_j_index] = -99999.
                     getmatchtree([del_i_index,del_j_index],lllnode_obj, llllnode_obj, trace_value,mat_tmp2, tree_tmp1, tree_tmp2)
-                    # getmatchtree([del_i_index,del_j_index], llllnode_obj, lllnode_obj, trace_value,mat_tmp2_2, tree_tmp2_2, tree_tmp1_2)
+                    getmatchtree([del_i_index,del_j_index], olllnode_obj, ollllnode_obj, trace_value,mat_tmp2_2, tree_tmp2_2, tree_tmp1_2)
                     
                     tree_tmp3 = []
                     tree_tmp4 = []
@@ -849,7 +853,7 @@ def scoremat(TreeSeqFile:str,
                     tree_tmp4_2 = []
                     mat_tmp3[del_i_index,del_j_index] = -99999.
                     getmatchtree([del_i_index,del_j_index],lllnode_label, llllnode_label, trace_value,mat_tmp3, tree_tmp3, tree_tmp4)
-                    # getmatchtree([del_i_index,del_j_index], llllnode_label,lllnode_label, trace_value,mat_tmp3_2, tree_tmp4_2, tree_tmp3_2)
+                    getmatchtree([del_i_index,del_j_index], olllnode_label,ollllnode_label, trace_value,mat_tmp3_2, tree_tmp3_2, tree_tmp4_2)
                     percent = 100
                     for i in range(len(scorelist)):
                         percent = min(percent, len(set(scorelist[i]['used']) - set(ttused)) / len(scorelist[i]['used'])*100.)
@@ -873,14 +877,6 @@ def scoremat(TreeSeqFile:str,
                             'Root2_label_node':single_node(label_leaves_list_to_tree(llllnode[del_j_index].leaves_label([]), llllnode[del_j_index].nodeobj)) + ';',
                             'Root1_match': list_tmp1,
                             'Root2_match': list_tmp2,
-                            # 'Root1_match_tree': '(' + ''.join(tree_tmp1) + ');',
-                            # 'Root2_match_tree': '(' + ''.join(tree_tmp2) + ');',
-                            # 'Root1_match_label_tree': '(' + ''.join(tree_tmp3) + ');',
-                            # 'Root2_match_label_tree': '(' + ''.join(tree_tmp4) + ');',
-                            # 'Root1_match_tree_2': '(' + ''.join(tree_tmp1_2) + ');',
-                            # 'Root2_match_tree_2': '(' + ''.join(tree_tmp2_2) + ');',
-                            # 'Root1_match_label_tree_2': '(' + ''.join(tree_tmp3_2) + ');',
-                            # 'Root2_match_label_tree_2': '(' + ''.join(tree_tmp4_2) + ');',
                             'Root1_match_tree': fix_parentheses('(' + ''.join(tree_tmp1) + ')'),
                             'Root2_match_tree': fix_parentheses('(' + ''.join(tree_tmp2) + ')'),
                             'Root1_match_label_tree': fix_parentheses('(' + ''.join(tree_tmp3) + ')'),

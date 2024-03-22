@@ -111,24 +111,14 @@ for (iii in 1:nrow(sorttree1)) {
 
     # 将字符串保存到文件
     # writeLines(tree1, file_path)
-    # writeLines(tree1_seq, file_path2)
+    writeLines(tree1_seq, file_path2)
 
     tree1_label <- Root1_Root2$Root1_label_node[1]
 
     tree2 <- Root1_Root2$Root2_node
 
-    # aaa <- tryCatch(
-    # {
-    #     x <- read.tree(text = tree1)
-    # },error = function(e) {})
-    # if (is.null(aaa)) {
-    #     cat("base Tree 为单节点，故终止……\n")
-    #     setTxtProgressBar(pb1, iii / nrow(sorttree1))
-    #     next()
-    # }
-    
     x <- read.tree(text = tree1)
-    if(length(x$tip.label) <= 1){
+    if (length(x$tip.label) <= 1) {
         setTxtProgressBar(pb1, iii / nrow(sorttree1))
         next()
     }
@@ -178,8 +168,9 @@ for (iii in 1:nrow(sorttree1)) {
     prune_count <- c(0, "prune") # 统计对应的剪枝个数
     score_count <- c(0, "Score") # 统计对应的得分
     tree_seq <- c(0, tree1_seq) # 子树的原结构
+    Serial_Number <- c(0, "Serial Number")
 
-    #对齐标志位
+    # 对齐标志位
     alig_index <- 1
     for (i in 1:nrow(Root1_Root2)) {
         Root2_match_tree <- Root1_Root2$Root2_match_tree[i]
@@ -199,9 +190,9 @@ for (iii in 1:nrow(sorttree1)) {
         # if (is.null(bbb)) {
         #     next
         # }
-        
+
         x_match <- read.tree(text = Root2_match_tree)
-        if(length(x_match$tip.label) <= 1){
+        if (length(x_match$tip.label) <= 1) {
             next()
         }
         if (exists("mytype2")) {
@@ -254,29 +245,30 @@ for (iii in 1:nrow(sorttree1)) {
         prune_count[alig_index + 2] <- lengths(Root1_Root2$Root2_prune[i])
         score_count[alig_index + 2] <- Root1_Root2$Score[i]
         tree_seq[alig_index + 2] <- Root1_Root2$Root2_seq[i]
+        Serial_Number[alig_index + 2] <- l_tmp[i]
         alig_index <- alig_index + 1
     }
-    match_dataframe <- rbind(match_dataframe, base_prune_count, prune_count, score_count, tree_seq)
-    pg + scale_color_manual(values = c(
-        "C3" = "#A6CEE3",
-        "C1" = "#1F78B4",
-        "C2" = "#B2DF8A",
-        "C4" = "#33A02C",
-        "R2" = "#FB9A99",
-        "C5" = "#E31A1C",
-        "C7" = "#FDBF6F",
-        "C6" = "#FF7F00",
-        "C10" = "#CAB2D6",
-        "C9" = "#6A3D9A",
-        "R1" = "#FFFF99",
-        "C8" = "#B15928",
-        # 'UK' = 'grey',
-        "A" = "#a11f1f", "B" = "#0e0ea6", "C" = "#246f24", "D" = "#afaf1e", "E" = "#aa707a", "F" = "#c58204", "X" = "#5c5450"
-    ))
+    match_dataframe <- rbind(match_dataframe, base_prune_count, prune_count, score_count, tree_seq, Serial_Number)
+    # pg + scale_color_manual(values = c(
+    #     "C3" = "#A6CEE3",
+    #     "C1" = "#1F78B4",
+    #     "C2" = "#B2DF8A",
+    #     "C4" = "#33A02C",
+    #     "R2" = "#FB9A99",
+    #     "C5" = "#E31A1C",
+    #     "C7" = "#FDBF6F",
+    #     "C6" = "#FF7F00",
+    #     "C10" = "#CAB2D6",
+    #     "C9" = "#6A3D9A",
+    #     "R1" = "#FFFF99",
+    #     "C8" = "#B15928",
+    #     # 'UK' = 'grey',
+    #     "A" = "#a11f1f", "B" = "#0e0ea6", "C" = "#246f24", "D" = "#afaf1e", "E" = "#aa707a", "F" = "#c58204", "X" = "#5c5450"
+    # ))
 
-    width <- max((2.2 * match_times1[iii]), 10)
+    width <- max((2.3 * match_times1[iii]), 15)
     # cat(width)
-    height <- max(nrow(match_dataframe), 15) / 1.5
+    height <- max(nrow(match_dataframe), 15)
     # cat(height)
     width <- max(width, height)
     height <- max(width, height)
@@ -322,14 +314,14 @@ for (iii in 1:nrow(sorttree1)) {
     file_path <- paste(output, "DensitreeALL/", nrow(Root1_Root2), "_", whichtree, "_", Chosen_Root1, "_sub_tree.nwk", sep = "")
 
     # 将字符串保存到文件
-    # writeLines(tree1, file_path)
+    writeLines(tree1, file_path)
 
     tree1_label <- Root1_Root2$Root1_label_node[1]
 
     tree2 <- Root1_Root2$Root2_node
 
     x <- read.tree(text = tree1)
-    if(length(x$tip.label) <= 1){
+    if (length(x$tip.label) <= 1) {
         setTxtProgressBar(pb2, iii / nrow(sorttree1))
         next()
     }
@@ -379,8 +371,9 @@ for (iii in 1:nrow(sorttree1)) {
     prune_count <- c(0, "prune") # 统计对应的剪枝个数
     score_count <- c(0, "Score") # 统计对应的得分
     tree_seq <- c(0, tree1_seq) # 子树的原结构
+    Serial_Number <- c(0, "Serial Number")
 
-    #对齐标志位
+    # 对齐标志位
     alig_index <- 1
     for (i in 1:nrow(Root1_Root2)) {
         Root2_match_tree <- Root1_Root2$Root2_match_tree[i]
@@ -388,7 +381,7 @@ for (iii in 1:nrow(sorttree1)) {
         Root1_match_label_tree <- Root1_Root2$Root1_match_label_tree[i]
 
         x_match <- read.tree(text = Root2_match_tree)
-        if(length(x_match$tip.label) <= 1){
+        if (length(x_match$tip.label) <= 1) {
             next()
         }
 
@@ -441,28 +434,29 @@ for (iii in 1:nrow(sorttree1)) {
         prune_count[alig_index + 2] <- lengths(Root1_Root2$Root2_prune[i])
         score_count[alig_index + 2] <- Root1_Root2$Score[i]
         tree_seq[alig_index + 2] <- Root1_Root2$Root2_seq[i]
+        Serial_Number[alig_index + 2] <- l_tmp[i]
         alig_index <- alig_index + 1
     }
-    match_dataframe <- rbind(match_dataframe, base_prune_count, prune_count, score_count, tree_seq)
-    pg + scale_color_manual(values = c(
-        "C3" = "#A6CEE3",
-        "C1" = "#1F78B4",
-        "C2" = "#B2DF8A",
-        "C4" = "#33A02C",
-        "R2" = "#FB9A99",
-        "C5" = "#E31A1C",
-        "C7" = "#FDBF6F",
-        "C6" = "#FF7F00",
-        "C10" = "#CAB2D6",
-        "C9" = "#6A3D9A",
-        "R1" = "#FFFF99",
-        "C8" = "#B15928",
-        # 'UK' = 'grey',
-        "A" = "#a11f1f", "B" = "#0e0ea6", "C" = "#246f24", "D" = "#afaf1e", "E" = "#aa707a", "F" = "#c58204", "X" = "#5c5450"
-    ))
-    width <- max((2.2 * match_times2[iii]), 10)
+    match_dataframe <- rbind(match_dataframe, base_prune_count, prune_count, score_count, tree_seq, Serial_Number)
+    # pg + scale_color_manual(values = c(
+    #     "C3" = "#A6CEE3",
+    #     "C1" = "#1F78B4",
+    #     "C2" = "#B2DF8A",
+    #     "C4" = "#33A02C",
+    #     "R2" = "#FB9A99",
+    #     "C5" = "#E31A1C",
+    #     "C7" = "#FDBF6F",
+    #     "C6" = "#FF7F00",
+    #     "C10" = "#CAB2D6",
+    #     "C9" = "#6A3D9A",
+    #     "R1" = "#FFFF99",
+    #     "C8" = "#B15928",
+    #     # 'UK' = 'grey',
+    #     "A" = "#a11f1f", "B" = "#0e0ea6", "C" = "#246f24", "D" = "#afaf1e", "E" = "#aa707a", "F" = "#c58204", "X" = "#5c5450"
+    # ))
+    width <- max((2.3 * match_times2[iii]), 15)
     # cat(width)
-    height <- max(nrow(match_dataframe), 15) / 1.5
+    height <- max(nrow(match_dataframe), 15)
     # cat(height)
     width <- max(width, height)
     height <- max(width, height)

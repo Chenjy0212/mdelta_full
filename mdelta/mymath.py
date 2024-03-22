@@ -133,7 +133,8 @@ def GetMaxScore(trace,
             m = Munkres()
             
             indexes = m.compute(cost_matrix)
-            # print(indexes)
+            # for i in indexes:
+                # print(f"行: {i[0]}, 列: {i[1]}")
             row_use_list = [item[0] for item in indexes]
             col_use_list = [item[1] for item in indexes]
             # print(row_use_list, col_use_list)
@@ -151,7 +152,7 @@ def GetMaxScore(trace,
                 #print(row, column)
                 value = local_matrix[row][column]
                 total += value
-                if value > -1:
+                if value > prune:
                     trace_tmp.append([local_matrix_root1_index[row], local_matrix_root2_index[column]])
 
             score += total

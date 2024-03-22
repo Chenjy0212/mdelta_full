@@ -1,15 +1,3 @@
-# if(!require("rjson", quietly=TRUE)){
-# 	install.packages("rjson", repos = "http://cran.us.r-project.org")
-# }
-# if (!require("BiocManager", quietly = TRUE)){
-#     install.packages("BiocManager", repos = "http://cran.us.r-project.org")
-# }
-# if(!require("ggtree", quietly=TRUE)){
-# 	BiocManager::install("ggtree")
-# }
-# if(!require("ggtreeExtra", quietly=TRUE)){
-# 	BiocManager::install("ggtreeExtra")
-# }
 options(warn = -1)
 
 args <- commandArgs(T)
@@ -55,6 +43,7 @@ if (max(sorttree2) >= max(sorttree1)) {
 Chosen_Root1 <- names(sorttree1[1])
 
 l_tmp <- which(data$Root1_label == Chosen_Root1, arr.ind = TRUE)
+# print(l_tmp)
 Root1_Root2 <- data[l_tmp, ]
 # Root1_Root2
 
@@ -70,24 +59,14 @@ file_path2 <- paste(output, "DensitreeBEST/", "BEST_", nrow(Root1_Root2), "_", w
 
 # 将字符串保存到文件
 # writeLines(tree1, file_path)
-# writeLines(tree1_seq, file_path2)
+writeLines(tree1_seq, file_path2)
 
 tree1_label <- Root1_Root2$Root1_label_node[1]
 
 tree2 <- Root1_Root2$Root2_node
 
-# aaa <- tryCatch(
-#     {
-#         x <- read.tree(text = tree1)
-#     },
-#     error = function(e) {})
-# if (is.null(aaa)) {
-#     cat("Densitree Best Warning: base Tree 为单节点，故终止……\n")
-#     q()
-# }
-
 x <- read.tree(text = tree1)
-if(length(x$tip.label) <= 1){
+if (length(x$tip.label) <= 1) {
     cat("Densitree Best Warning: base Tree 为单节点，故终止……\n")
     q()
 }
@@ -183,13 +162,18 @@ base_prune_count <- c(0, "base_prune") # 统计base剪枝个数
 prune_count <- c(0, "prune") # 统计对应的剪枝个数
 score_count <- c(0, "Score") # 统计对应的得分
 tree_seq <- c(0, tree1_seq) # 子树的原结构
+Serial_Number <- c(0, "Serial Number")
 
+alig_index <- 1
 for (i in 1:nrow(Root1_Root2)) {
     Root2_match_tree <- Root1_Root2$Root2_match_tree[i]
     # cat(Root2_match_tree)
     Root1_match_label_tree <- Root1_Root2$Root1_match_label_tree[i]
     # Root1_match_label_tree = '(0,(1_0,1_1));'
     x_match <- read.tree(text = Root2_match_tree)
+    if (length(x_match$tip.label) <= 1) {
+        next()
+    }
 
     if (exists("mytype2")) {
         # cat(mytype2)
@@ -237,33 +221,43 @@ for (i in 1:nrow(Root1_Root2)) {
         )
     # theme(legend.position = 'none')
 
-    base_prune_count[i + 2] <- lengths(Root1_Root2$Root1_prune[i])
-    prune_count[i + 2] <- lengths(Root1_Root2$Root2_prune[i])
-    score_count[i + 2] <- Root1_Root2$Score[i]
-    tree_seq[i + 2] <- Root1_Root2$Root2_seq[i]
-}
-match_dataframe <- rbind(match_dataframe, base_prune_count, prune_count, score_count, tree_seq)
-# cat(match_dataframe)
-pg <- pg + scale_color_manual(values = c(
-    "C3" = "#A6CEE3",
-    "C1" = "#1F78B4",
-    "C2" = "#B2DF8A",
-    "C4" = "#33A02C",
-    "R2" = "#FB9A99",
-    "C5" = "#E31A1C",
-    "C7" = "#FDBF6F",
-    "C6" = "#FF7F00",
-    "C10" = "#CAB2D6",
-    "C9" = "#6A3D9A",
-    "R1" = "#FFFF99",
-    "C8" = "#B15928",
-    # 'UK' = 'grey',
-    "A" = "#a11f1f", "B" = "#0e0ea6", "C" = "#246f24", "D" = "#afaf1e", "E" = "#aa707a", "F" = "#c58204", "X" = "#5c5450"
-))
+    base_prune_count[alig_index + 2] <- lengths(Root1_Root2$Root1_prune[i])
+    prune_count[alig_index + 2] <- lengths(Root1_Root2$Root2_prune[i])
+    score_count[alig_index + 2] <- Root1_Root2$Score[i]
+    tree_seq[alig_index + 2] <- Root1_Root2$Root2_seq[i]
+    Serial_Number[alig_index + 2] <- l_tmp[i]
 
-width <- max((2.2 * max(sorttree1)), 10)
+    alig_index <- alig_index + 1
+}
+match_dataframe <- rbind(match_dataframe, base_prune_count, prune_count, score_count, tree_seq, Serial_Number)
+# cat(match_dataframe)
+# pg <- pg +
+# scale_color_manual(values = c(
+#     "#B8DBB3", "#72B063", "#719AAC", "#E29135", "#94C6CD", "#4A5F7E",
+#     "#A5AEB7"
+# ))+
+# scale_color_manual(values = c(
+#     "C3" = "#A6CEE3",
+#     "C1" = "#1F78B4",
+#     "C2" = "#B2DF8A",
+#     "C4" = "#33A02C",
+#     "R2" = "#FB9A99",
+#     "C5" = "#E31A1C",
+#     "C7" = "#FDBF6F",
+#     "C6" = "#FF7F00",
+#     "C10" = "#CAB2D6",
+#     "C9" = "#6A3D9A",
+#     "R1" = "#FFFF99",
+#     "C8" = "#B15928",
+#     # 'UK' = 'grey',
+#     "A" = "#a11f1f", "B" = "#0e0ea6", "C" = "#246f24",
+#     "D" = "#afaf1e", "E" = "#aa707a", "F" = "#c58204",
+#     "X" = "#5c5450"
+# ))
+
+width <- max((2.3 * max(sorttree1)), 15)
 # cat(width)
-height <- max(nrow(match_dataframe), 15) / 1.5
+height <- max(nrow(match_dataframe), 15)
 # cat(height)
 width <- max(width, height)
 height <- max(width, height)
