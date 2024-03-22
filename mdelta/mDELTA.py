@@ -1112,6 +1112,7 @@ if __name__ == '__main__':
         ########################################################
         
         ########################################################
+        __spec__ = "ModuleSpec(name='builtins', loader=<class '_frozen_importlib.BuiltinImporter'>)"
         # 创建一个进程间共享的队列
         manager = mp.Manager()
         result_queue = manager.Queue()
