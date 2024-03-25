@@ -420,6 +420,12 @@ def get_default():
     jslink((cpus, 'value'), (cpus2, 'value'))
     #合在一起
     P = widgets.VBox([P1, P2, cpus, cpus2])
+
+    #densitree celltype color
+    dccfilelist = ['ExampleFile/celltype_color.csv']      
+    dccfile = widgets.Combobox(layout=Layout(width='auto', height='auto'),description = 'type to color', placeholder = '请在此输入文件名或文件路径，或者在最右方点击选择', options = dccfilelist)
+
+    dcc = widgets.VBox([dccfile])
     
     #可选参数
     options = widgets.Accordion(children=[
@@ -433,6 +439,7 @@ def get_default():
         merge,
         diff,
         P,
+        dcc,
     ])
     
     title_list = ['谱系树终末节点名称转为节点类型文件',
@@ -445,6 +452,7 @@ def get_default():
                   '中间节点融合罚分',
                   '不同于前N项最优匹配的序列百分比',
                   '随机打乱终末节点所在位置的次数（不改变拓扑结构）',
+                  '密度树的细胞类型对应颜色文件'
                    ]
     
     for i in range(len(title_list)):
@@ -459,9 +467,9 @@ def get_default():
     accordion.set_title(1, '可选参数')
     
     menu1 = widgets.VBox([accordion, widgets.HBox([mytqdm, jupyter]), output])
-    menu2 = widgets.VBox([widgets.HTML(value="<h2><b>必选参数</b></h3>"),
+    menu2 = widgets.VBox([widgets.HTML(value="<h2><b>必选参数</b></h2>"),
                           positional, 
-                          widgets.HTML(value="<h2><b>可选参数</b></h3>"),
+                          widgets.HTML(value="<h2><b>可选参数</b></h2>"),
                           widgets.Label(value="定性计算"),
                           Name2Type,
                           dingxing,
@@ -475,6 +483,8 @@ def get_default():
                           merge,
                           diff,
                           P,
+                          widgets.HTML(value="<h3><b>密度树</b></h3>"),
+                          dcc,
                           widgets.HBox([mytqdm, jupyter]), 
                           output])
     
@@ -530,7 +540,8 @@ def get_default():
         'match_tree': './feature/match_tree.r',
         'network': './feature/network.py',
         'densitree':'./feature/densitree.r',
-        'da':'./feature/densitreeALL.r'
+        'da':'./feature/densitreeALL.r',
+        'dcc':dccfile,
            }
 
 def forlist(start, end, step):

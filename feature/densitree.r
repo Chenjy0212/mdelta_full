@@ -19,6 +19,16 @@ if (!is.na(args[2]) && args[2] != "" && args[2] != "non") {
     output <- ""
 }
 
+# celltype color
+if (!is.na(args[3]) && args[3] != "non") {
+    ccfile <- read.csv(file = args[3])
+    cc <- c()
+    # 遍历数据框的列
+    for (i in 1:nrow(ccfile)) {
+        cc[ccfile[i, 1]] <- ccfile[i, 2]
+    }
+}
+
 folder_path <- paste(output, "DensitreeBEST", sep = "")
 if (!dir.exists(folder_path)) {
     # cat(paste('创建新文件夹: ',output,'DensitreeBEST', sep=""))
@@ -233,10 +243,6 @@ match_dataframe <- rbind(match_dataframe, base_prune_count, prune_count, score_c
 # cat(match_dataframe)
 # pg <- pg +
 # scale_color_manual(values = c(
-#     "#B8DBB3", "#72B063", "#719AAC", "#E29135", "#94C6CD", "#4A5F7E",
-#     "#A5AEB7"
-# ))+
-# scale_color_manual(values = c(
 #     "C3" = "#A6CEE3",
 #     "C1" = "#1F78B4",
 #     "C2" = "#B2DF8A",
@@ -254,6 +260,9 @@ match_dataframe <- rbind(match_dataframe, base_prune_count, prune_count, score_c
 #     "D" = "#afaf1e", "E" = "#aa707a", "F" = "#c58204",
 #     "X" = "#5c5450"
 # ))
+if (!is.na(args[3]) && args[3] != "non") {
+    pg <- pg + scale_color_manual(values = cc)
+}
 
 width <- max((2.3 * max(sorttree1)), 15)
 # cat(width)

@@ -18,6 +18,17 @@ if (!is.na(args[2]) && args[2] != "" && args[2] != "non") {
 } else {
     output <- ""
 }
+
+# celltype color
+if (!is.na(args[3]) && args[3] != "non") {
+    ccfile <- read.csv(file = args[3])
+    cc <- c()
+    # 遍历数据框的列
+    for (i in 1:nrow(ccfile)) {
+        cc[ccfile[i, 1]] <- ccfile[i, 2]
+    }
+}
+
 folder_path <- paste(output, "DensitreeALL", sep = "")
 if (!dir.exists(folder_path)) {
     # 如果文件夹不存在，则创建文件夹
@@ -178,19 +189,6 @@ for (iii in 1:nrow(sorttree1)) {
         Root1_match_label_tree <- Root1_Root2$Root1_match_label_tree[i]
         # cat(Root1_match_label_tree)
 
-        # bbb <- tryCatch(
-        #     {
-        #         x_match <- read.tree(text = Root2_match_tree)
-        #     },
-        #     error = function(e) {
-        #         # cat("ERROR :",conditionMessage(e),"\n")
-        #         # cat(iii, " 只有单个叶子节点，跳过~\n")
-        #     }
-        # )
-        # if (is.null(bbb)) {
-        #     next
-        # }
-
         x_match <- read.tree(text = Root2_match_tree)
         if (length(x_match$tip.label) <= 1) {
             next()
@@ -265,6 +263,9 @@ for (iii in 1:nrow(sorttree1)) {
     #     # 'UK' = 'grey',
     #     "A" = "#a11f1f", "B" = "#0e0ea6", "C" = "#246f24", "D" = "#afaf1e", "E" = "#aa707a", "F" = "#c58204", "X" = "#5c5450"
     # ))
+    if (!is.na(args[3]) && args[3] != "non") {
+        pg <- pg + scale_color_manual(values = cc)
+    }
 
     width <- max((2.3 * match_times1[iii]), 15)
     # cat(width)
@@ -454,6 +455,10 @@ for (iii in 1:nrow(sorttree1)) {
     #     # 'UK' = 'grey',
     #     "A" = "#a11f1f", "B" = "#0e0ea6", "C" = "#246f24", "D" = "#afaf1e", "E" = "#aa707a", "F" = "#c58204", "X" = "#5c5450"
     # ))
+    if (!is.na(args[3]) && args[3] != "non") {
+        pg <- pg + scale_color_manual(values = cc)
+    }
+
     width <- max((2.3 * match_times2[iii]), 15)
     # cat(width)
     height <- max(nrow(match_dataframe), 15)
