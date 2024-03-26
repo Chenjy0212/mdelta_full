@@ -38,6 +38,7 @@ parser.add_argument('-t','--top',type=int, default=0, help='[int > 0] Performs l
 parser.add_argument('-ma','--mav',type=float, default=2., help=' [float] Default=2.')
 parser.add_argument('-mi','--miv',type=float, default=-1., help=' [float] Default=-1. Shorthand for a simple matching score scheme, where the matching score between a pair of the same cell types is MAV and all other pairs are MIV. (e.g. `-ma 2 -mi -2`). Overridden by `-sd`.')
 parser.add_argument('-p','--pv',type=float, default=-1., help=' [float] The score for pruning a tip of the tree (e.g. `-p -2`). Default to -1.')
+parser.add_argument('-pper','--prunepercent',type=float, default=20., help=' [float] The comparison result requires either party\'s pruning rate to be less than or equal to PPER. The pruning rate is the proportion of pruned leaf nodes to all leaf nodes in the subtree. Default to 20.')
 parser.add_argument('-T','--Tqdm',type=int, default=1, help=' [0(off) or 1(on)] Toggle for the jupyter notebook environment.')
 parser.add_argument('-n','--notebook',type=int, default=0, help='[0(off) or 1(on)] Toggle for the jupyter notebook environment.')
 parser.add_argument('-P','--PERM',type=int, default=0, help='[int > 0] Toggle for the statistical significance. For each observed alignment, the aligned trees will be permuted PERM times to generate a null distribution of alignment scores, with which a P value can be calculated for the observed alignment score.')
@@ -48,7 +49,7 @@ parser.add_argument('-mg','--merge',type=float, default=10, help='[float] This i
 parser.add_argument('-x','--diff',type=int, default=0, help='[int > 0] Alignment must consist of a minimal of DIFF percent aligned cell pairs that are different from previous(better) local alignments in order to be considered as another new alignment (e.g. `-x 20` means 20 percent).')
 
 args = parser.parse_args() #开始解析参数 --对于可选参数来说
-
+# print(args)
 TreeSeqFile = args.TreeSeqFile
 TreeSeqFile2 = args.TreeSeqFile2
 Name2TypeFile = args.Name2TypeFile
@@ -71,9 +72,12 @@ CPUs = args.CPUs
 diff = args.diff
 merge = args.merge
 output = args.output
+pper = args.prunepercent
 if output != '':
     if output[-1] != '/':
         output += '/'
+
+
 
 TreeSeqFileName = os.path.basename(TreeSeqFile)
 TreeSeqFileName2 = os.path.basename(TreeSeqFile2)
@@ -407,7 +411,8 @@ def scoremat(TreeSeqFile:str,
             Tqdm:int = 1,
             notebook:int = 0,
             diff:int = 0,
-            merge:float = 100.):
+            merge:float = 100.,
+            ):
     # print(Name2TypeFile)
     if Name2TypeFile != '' and Name2TypeFile != None and Name2TypeFile != 'non':
         TreeSeqType = ReadTreeSeq_Name2Type(TreeSeqFile,Name2TypeFile)
@@ -816,17 +821,21 @@ def scoremat(TreeSeqFile:str,
             getmatchtree([del_i_index,del_j_index],lllnode_label, llllnode_label, trace_value,mat_tmp3, tree_tmp3, tree_tmp4)
             getmatchtree([del_i_index,del_j_index], olllnode_label,ollllnode_label, trace_value,mat_tmp3_2, tree_tmp3_2, tree_tmp4_2)
             
-            #if list_tmp1[0] != lllnode[del_i_index].label:
-            #    list_tmp1.insert(0,lllnode[del_i_index].label)
-            #if list_tmp2[0] != llllnode[del_j_index].label:    
-            #    list_tmp2.insert(0,llllnode[del_j_index].label)
-            
-            # print(scorelist)
             if jjj > 0 and diff > 0:
                 for i in range(len(scorelist)):
+                    # 不同率
                     percent = min(percent, len(set(scorelist[i]['used']) - set(ttused)) / len(scorelist[i]['used'])*100.)
+                # print(percent)
+                # 要移除的元素列表
+                elements_to_remove = [',', '(',')']
+                # 使用列表解析去除元素
+                tree_tmp1_removed = [element for element in tree_tmp1 if element not in elements_to_remove]
+                tree_tmp2_removed = [element for element in tree_tmp2 if element not in elements_to_remove]
+
+                match1_prune_percent = (1 - len(tree_tmp1_removed)/lllnode[del_i_index].leaf_count()) * 100
+                match2_prune_percent = (1 - len(tree_tmp2_removed)/llllnode[del_j_index].leaf_count()) * 100
                 
-                while percent < float(diff):
+                while percent < float(diff) or match1_prune_percent > pper or match2_prune_percent > pper:
                     maxscore = np.max(mat_tmp)
                     if (maxscore + 99999.) < 0.01:
                         break
@@ -857,14 +866,17 @@ def scoremat(TreeSeqFile:str,
                     percent = 100
                     for i in range(len(scorelist)):
                         percent = min(percent, len(set(scorelist[i]['used']) - set(ttused)) / len(scorelist[i]['used'])*100.)
+                
+                    tree_tmp1_removed = [element for element in tree_tmp1 if element not in elements_to_remove]
+                    tree_tmp2_removed = [element for element in tree_tmp2 if element not in elements_to_remove]
+
+                    match1_prune_percent = (1 - len(tree_tmp1_removed)/lllnode[del_i_index].leaf_count()) * 100
+                    match2_prune_percent = (1 - len(tree_tmp2_removed)/llllnode[del_j_index].leaf_count()) * 100
+                
+                # print('不同率:', percent)
+                # print("剪枝率：", match1_prune_percent, match2_prune_percent)
             
-#                 print('不同率:')
-#                 print(percent)
-            #tree_tmp1.append(';')
-            #tree_tmp2.append(';')
-            #tree_tmp3.append(';')
-            #tree_tmp4.append(';')
-            #print(ttused)
+            
                 
             scorelist.append({'Score':maxscore,
                             'Root1_label':lllnode[del_i_index].label,
@@ -892,16 +904,10 @@ def scoremat(TreeSeqFile:str,
                             'row':del_i_index, 
                             'col':del_j_index,
                             'used':ttused,
-                              'Root1_leaves_count':lllnode[del_i_index].leaf_count(),
-                              'Root2_leaves_count':llllnode[del_j_index].leaf_count()
+                            'Root1_leaves_count':lllnode[del_i_index].leaf_count(),
+                            'Root2_leaves_count':llllnode[del_j_index].leaf_count()
                              })
 
-            
-
-        #print(ttrace)
-        #print(mat_tmp)
-        #print(diff)
-        #print(root1.node_count()*root2.node_count())
         return({'matrix':mmatrix, 
                 'tree1_leaves_nodename_to_label': dict(zip(oroot1_label2celltype[1],  root1_label2celltype[0])),
                 'tree1_leaves_nodename_to_celltype': dict(zip(oroot1_label2celltype[1],  root1_label2celltype[1])),

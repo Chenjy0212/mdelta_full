@@ -202,6 +202,15 @@ mDELTA.py -h
 </tr>
 
 <tr>
+<td> -pper PPER, --prunepercent PRUNEPERCENT  </td>
+<td> [float] </td> 
+<td> Default=20. The comparison result requires either party's 
+                        pruning rate to be less than or equal to PPER. 
+                        The pruning rate is the proportion of pruned 
+                        leaf nodes to all leaf nodes in the subtree.  </td>
+</tr>
+
+<tr>
 <td> -T TQDM, <tqdm>--Tqdm TQDM  </td>
 <td> [0(off) or 1(on)] </td> 
 <td> Whether to display the running Progress bar </td>

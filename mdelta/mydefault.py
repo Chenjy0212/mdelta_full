@@ -152,6 +152,15 @@ def get_default():
 </tr>
 
 <tr>
+<td> -pper PPER, --prunepercent PRUNEPERCENT  </td>
+<td> [float] </td> 
+<td> Default=20. The comparison result requires either party's 
+                        pruning rate to be less than or equal to PPER. 
+                        The pruning rate is the proportion of pruned 
+                        leaf nodes to all leaf nodes in the subtree.  </td>
+</tr>
+
+<tr>
 <td> -T TQDM, <tqdm>--Tqdm TQDM  </td>
 <td> [0(off) or 1(on)] </td> 
 <td> Whether to display the running Progress bar </td>
@@ -377,6 +386,11 @@ def get_default():
     pstep = widgets.FloatSlider(value=1.0, min = 0.1, max= 10.0, description='p_step', layout=Layout(width='auto', height='auto'))
     #合在一起
     p = widgets.VBox([p1, pstep])
+
+    #prune_percent
+    p1_percent = widgets.FloatSlider(value = 20.0, description='prune_percent', min= 0.0, max = 100.0, layout = Layout(width = 'auto', height = 'auto'))
+    #合在一起
+    p_percent = widgets.VBox([p1_percent])
     
     #tqdm 进度条
     mytqdm = widgets.Checkbox(
@@ -436,6 +450,7 @@ def get_default():
         mav,
         miv,
         p,
+        p_percent,
         merge,
         diff,
         P,
@@ -449,6 +464,7 @@ def get_default():
                   '终末节点一致匹配得分',
                   '终末节点错配减分',
                   '剪枝罚分',
+                  '剪枝有效率',
                   '中间节点融合罚分',
                   '不同于前N项最优匹配的序列百分比',
                   '随机打乱终末节点所在位置的次数（不改变拓扑结构）',
@@ -480,6 +496,7 @@ def get_default():
                           mav,
                           miv,
                           p,
+                          p_percent,
                           merge,
                           diff,
                           P,
@@ -542,6 +559,7 @@ def get_default():
         'densitree':'./feature/densitree.r',
         'da':'./feature/densitreeALL.r',
         'dcc':dccfile,
+        'pper':p1_percent,
            }
 
 def forlist(start, end, step):
@@ -560,6 +578,7 @@ def get_listvalue(l):
             else:
                 l_new.append('non')
         else: l_new.append(i)
+    # print(l_new)
     return l_new
 
 def get_output(o):
