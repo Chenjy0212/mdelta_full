@@ -20,6 +20,7 @@ import numpy
 import json
 import queue
 import datetime
+import math
 
 
 parser = argparse.ArgumentParser(prog='mDELTA', description = 'Multifuricating Developmental cEll Lineage Tree Alignment(mDELTA) ',epilog = 'More details on https://github.com/Chenjy0212/modelta')
@@ -832,10 +833,16 @@ def scoremat(TreeSeqFile:str,
                 tree_tmp1_removed = [element for element in tree_tmp1 if element not in elements_to_remove]
                 tree_tmp2_removed = [element for element in tree_tmp2 if element not in elements_to_remove]
 
-                match1_prune_percent = (1 - len(tree_tmp1_removed)/lllnode[del_i_index].leaf_count()) * 100
-                match2_prune_percent = (1 - len(tree_tmp2_removed)/llllnode[del_j_index].leaf_count()) * 100
+                # match1_prune_percent = (1 - len(tree_tmp1_removed)/lllnode[del_i_index].leaf_count()) * 100
+                # match2_prune_percent = (1 - len(tree_tmp2_removed)/llllnode[del_j_index].leaf_count()) * 100
+                prune1_count = lllnode[del_i_index].leaf_count() - len(tree_tmp1_removed)
+                prune2_count = llllnode[del_j_index].leaf_count() - len(tree_tmp2_removed)
+                # print(lllnode[del_i_index].leaf_count() * pper/100.)
+                allow_prune1 = math.ceil(lllnode[del_i_index].leaf_count() * pper/100.)
+                # print(allow_prune1)
+                allow_prune2 = math.ceil(llllnode[del_j_index].leaf_count() * pper/100.)
                 
-                while percent < float(diff) or match1_prune_percent > pper or match2_prune_percent > pper:
+                while percent < float(diff) or prune1_count > allow_prune1 or prune2_count > allow_prune2:
                     maxscore = np.max(mat_tmp)
                     if (maxscore + 99999.) < 0.01:
                         break
