@@ -571,35 +571,35 @@ def scoremat(TreeSeqFile:str,
         #print(llldict, lllldict)
     else:
         for loop_index in loopindex(root1.level+1,root2.level+1):
-                #print(loop_index)
-                for i in range(lllloop[loop_index[0]]):
-                    for j in range(llllloop[loop_index[1]]): 
-                        i_index = 0
-                        j_index = 0
-                        for i_tmp in range(loop_index[0]):
-                            i_index += lllloop[i_tmp]
-                        i_index+=i
-                        for j_tmp in range(loop_index[1]):
-                            j_index += llllloop[j_tmp]
-                        j_index+=j
-                        matrix_tmp = matrix_values[llldict[i_index],:]
-                        matrix_tmp = matrix_tmp[:,lllldict[j_index]]
+            #print(loop_index)
+            for i in range(lllloop[loop_index[0]]):
+                for j in range(llllloop[loop_index[1]]): 
+                    i_index = 0
+                    j_index = 0
+                    for i_tmp in range(loop_index[0]):
+                        i_index += lllloop[i_tmp]
+                    i_index+=i
+                    for j_tmp in range(loop_index[1]):
+                        j_index += llllloop[j_tmp]
+                    j_index+=j
+                    matrix_tmp = matrix_values[llldict[i_index],:]
+                    matrix_tmp = matrix_tmp[:,lllldict[j_index]]
 
-                        matrix_values[i_index][j_index] = GetMaxScore(trace=trace_value,
-                                                                        root1=olll[loop_index[0]][i] if Lflag == 1 else lll[loop_index[0]][i],
-                                                                        root2=ollll[loop_index[1]][j] if Lflag == 1 else llll[loop_index[1]][j],
-                                                                        allmatrix = matrix_values,
-                                                                        root1_index=i_index, 
-                                                                        root2_index=j_index, 
-                                                                        local_matrix=matrix_tmp,
-                                                                        local_matrix_root1_index = ollldict[i_index] if Lflag == 1 else llldict[i_index],
-                                                                        local_matrix_root2_index = olllldict[j_index] if Lflag == 1 else lllldict[j_index], 
-                                                                        dict_score=score_dict,
-                                                                        Algorithm=Alg,
-                                                                        prune=pv,
-                                                                        lll_label = [i.label for i in olll[0]] if Lflag == 1 else [i.label for i in lll[0]],
-                                                                        llll_label = [i.label for i in ollll[0]] if Lflag == 1 else [i.label for i in llll[0]],
-                                                                        merge = merge,)
+                    matrix_values[i_index][j_index] = GetMaxScore(trace=trace_value,
+                                                                    root1=olll[loop_index[0]][i] if Lflag == 1 else lll[loop_index[0]][i],
+                                                                    root2=ollll[loop_index[1]][j] if Lflag == 1 else llll[loop_index[1]][j],
+                                                                    allmatrix = matrix_values,
+                                                                    root1_index=i_index, 
+                                                                    root2_index=j_index, 
+                                                                    local_matrix=matrix_tmp,
+                                                                    local_matrix_root1_index = ollldict[i_index] if Lflag == 1 else llldict[i_index],
+                                                                    local_matrix_root2_index = olllldict[j_index] if Lflag == 1 else lllldict[j_index], 
+                                                                    dict_score=score_dict,
+                                                                    Algorithm=Alg,
+                                                                    prune=pv,
+                                                                    lll_label = [i.label for i in olll[0]] if Lflag == 1 else [i.label for i in lll[0]],
+                                                                    llll_label = [i.label for i in ollll[0]] if Lflag == 1 else [i.label for i in llll[0]],
+                                                                    merge = merge,)
         #print(ttrace)
         #print(llldict)
         
@@ -838,6 +838,7 @@ def scoremat(TreeSeqFile:str,
                 prune1_count = lllnode[del_i_index].leaf_count() - len(tree_tmp1_removed)
                 prune2_count = llllnode[del_j_index].leaf_count() - len(tree_tmp2_removed)
                 # print(lllnode[del_i_index].leaf_count() * pper/100.)
+                # print(prune1_count)
                 allow_prune1 = math.ceil(lllnode[del_i_index].leaf_count() * pper/100.)
                 # print(allow_prune1)
                 allow_prune2 = math.ceil(llllnode[del_j_index].leaf_count() * pper/100.)
@@ -877,8 +878,11 @@ def scoremat(TreeSeqFile:str,
                     tree_tmp1_removed = [element for element in tree_tmp1 if element not in elements_to_remove]
                     tree_tmp2_removed = [element for element in tree_tmp2 if element not in elements_to_remove]
 
-                    match1_prune_percent = (1 - len(tree_tmp1_removed)/lllnode[del_i_index].leaf_count()) * 100
-                    match2_prune_percent = (1 - len(tree_tmp2_removed)/llllnode[del_j_index].leaf_count()) * 100
+                    # match1_prune_percent = (1 - len(tree_tmp1_removed)/lllnode[del_i_index].leaf_count()) * 100
+                    # match2_prune_percent = (1 - len(tree_tmp2_removed)/llllnode[del_j_index].leaf_count()) * 100
+                    prune1_count = lllnode[del_i_index].leaf_count() - len(tree_tmp1_removed)
+                    prune2_count = llllnode[del_j_index].leaf_count() - len(tree_tmp2_removed)
+                    
                 
                 # print('不同率:', percent)
                 # print("剪枝率：", match1_prune_percent, match2_prune_percent)
