@@ -273,11 +273,11 @@ for (iii in 1:nrow(sorttree1)) {
     # cat(height)
     width <- max(width, height)
     height <- max(width, height)
-    filename <- paste(nrow(Root1_Root2), "_", whichtree, "-", Chosen_Root1, "_dt.pdf", sep = "")
+    filename <- paste(nrow(Root1_Root2), "_", whichtree, "-", Chosen_Root1, sep = "")
     filenamepic <- paste(output, "DensitreeALL/", filename, "_dt.pdf", sep = "")
     ggsave(filename = filenamepic, width = width, height = width, limitsize = FALSE)
 
-    fileout <- paste(output, "DensitreeALL/", nrow(Root1_Root2), "_", whichtree, "_", Chosen_Root1, "_densitree_leaves_match.csv", sep = "")
+    fileout <- paste(output, "DensitreeALL/", filename, "_densitree_leaves_match.csv", sep = "")
     write.csv(match_dataframe[order(match_dataframe$y, decreasing = TRUE), ][c(-1)], fileout, row.names = FALSE)
 
 
@@ -465,14 +465,14 @@ for (iii in 1:nrow(sorttree1)) {
     # cat(height)
     width <- max(width, height)
     height <- max(width, height)
-    filname <- paste(nrow(Root1_Root2), "_", whichtree, "-", Chosen_Root1, "_dt.pdf", sep = "")
-    filenamepic <- paste(output, "DensitreeALL/", filname, "_dt.pdf", sep = "")
+    filename <- paste(nrow(Root1_Root2), "_", whichtree, "-", Chosen_Root1, sep = "")
+    filenamepic <- paste(output, "DensitreeALL/", filename, "_dt.pdf", sep = "")
     ggsave(filename = filenamepic, width = width, height = width, limitsize = FALSE)
 
-    fileout <- paste(output, "DensitreeALL/", nrow(Root1_Root2), "_", whichtree, "_", Chosen_Root1, "_densitree_leaves_match.csv", sep = "")
+    fileout <- paste(output, "DensitreeALL/", filename, "_densitree_leaves_match.csv", sep = "")
     write.csv(match_dataframe[order(match_dataframe$y, decreasing = TRUE), ][c(-1)], fileout, row.names = FALSE)
 
-    info_row <- c(match_times2[iii], tree1, filname)
+    info_row <- c(match_times2[iii], tree1, filename)
     info <- rbind(info, info_row)
 
     setTxtProgressBar(pb2, iii / nrow(sorttree1))
