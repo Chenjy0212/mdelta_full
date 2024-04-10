@@ -1150,17 +1150,17 @@ if __name__ == '__main__':
                 whichtop += 1
             whichtop = 1
         # print(rclist)
-
+        
         # 保存结果到csv中
-        if not os.path.exists('rand_p'):
+        if not os.path.exists(output + '/rand_p'):
             # 使用os.mkdir()函数创建文件夹
-            os.mkdir('rand_p')
+            os.mkdir(output + '/rand_p')
         current_time = datetime.datetime.now()
-        with open('rand_p/RS_' + current_time.strftime("%Y%m%d%H%M_") + 'top' + str(top) + '_perm' + str(times) + '.csv', mode='w', newline='') as file:
+        with open(output + '/rand_p/RS_' + current_time.strftime("%Y%m%d%H%M_") + 'top' + str(top) + '_perm' + str(times) + '.csv', mode='w', newline='') as file:
             writer = csv.writer(file)
             for i in top_score_dict:
                 writer.writerow(top_score_dict[i])
-        with open('rand_p/RS_sort_' + current_time.strftime("%Y%m%d%H%M_") + 'top' + str(top) + '_perm' + str(times) + '.csv', mode='w', newline='') as filesort:
+        with open(output + '/rand_p/RS_sort_' + current_time.strftime("%Y%m%d%H%M_") + 'top' + str(top) + '_perm' + str(times) + '.csv', mode='w', newline='') as filesort:
             writersort = csv.writer(filesort)
             for i in top_score_dict:
                 tmp = sorted(top_score_dict[i], reverse = True)
