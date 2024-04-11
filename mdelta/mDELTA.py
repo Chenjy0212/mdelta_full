@@ -955,6 +955,8 @@ def get_rmatrix(tree1seq: str, tree2seq: str, queue, score_dict, rclist):
     # 建树
     root1 = MultiTree(tree1seq)
     root2 = MultiTree(tree2seq)
+    oroot1 = MultiTree(tree1seq)
+    oroot2 = MultiTree(tree2seq)
 
     root1.CreatTree()
     root1.Postorder_Level()
@@ -962,12 +964,11 @@ def get_rmatrix(tree1seq: str, tree2seq: str, queue, score_dict, rclist):
     #for i in lll[0]:
         #print(i.label)
     lllnode = [j for i in lll for j in i]
-    lllnode_obj = [j.nodeobj for i in lll for j in i]
-    lllnode_label = [j.label for i in lll for j in i]
-    #print(lllnode_obj)
-    
-    # get root1 leaves' new label to celltype infos
-    root1_label2celltype = leafLable_to_celltype_info(lllnode)
+
+    oroot1.CreatTree()
+    oroot1.Postorder_Level()
+    olll = oroot1.nodes({}) #二维表示
+    olllnode = [j for i in olll for j in i]
 
     lllloop = []
     for i in lll:
@@ -975,17 +976,19 @@ def get_rmatrix(tree1seq: str, tree2seq: str, queue, score_dict, rclist):
     llldict = {}
     for index,iter in enumerate(lllnode):
         llldict[index] = [lllnode.index(i) for i in iter.son()]
+    ollldict = {}
+    for index,iter in enumerate(olllnode):
+        ollldict[index] = [olllnode.index(i) for i in iter.son()]
 
     root2.CreatTree()
     root2.Postorder_Level()
     llll = root2.nodes({}) #二维表示
     llllnode = [j for i in llll for j in i]
-    llllnode_obj = [j.nodeobj for i in llll for j in i]
-    llllnode_label = [j.label for i in llll for j in i]
-    #print(llllnode_obj)
-    
-    # get root2 leaves' new label to celltype infos
-    root2_label2celltype = leafLable_to_celltype_info(llllnode)
+
+    oroot2.CreatTree()
+    oroot2.Postorder_Level()
+    ollll = oroot2.nodes({}) #二维表示
+    ollllnode = [j for i in ollll for j in i]
 
     llllloop = []
     for i in llll:
@@ -993,6 +996,13 @@ def get_rmatrix(tree1seq: str, tree2seq: str, queue, score_dict, rclist):
     lllldict = {}
     for index,iter in enumerate(llllnode):
         lllldict[index] = [llllnode.index(i) for i in iter.son()]
+    olllldict = {}
+    for index,iter in enumerate(ollllnode):
+        olllldict[index] = [ollllnode.index(i) for i in iter.son()]
+    # print(ScoreDictFile)
+    Lflag = 0
+    if LScoreDictFile != '' and LScoreDictFile != None and LScoreDictFile != 'non':
+        Lflag = 1
 
     mmatrix = pd.DataFrame([[0.0 for i in range(len(llllnode))] for j in range(len(lllnode))],
                         index=[i.label for i in lllnode],
@@ -1144,7 +1154,7 @@ if __name__ == '__main__':
         whichtop = 1
         while not result_queue.empty():
             result = result_queue.get()
-            # print("Result:", result)
+            print("Result:", result)
             for N in result:
                 top_score_dict[whichtop].append(N)
                 whichtop += 1
