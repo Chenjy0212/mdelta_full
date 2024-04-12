@@ -16,6 +16,7 @@ if (!is.na(args[1])) {
     suppressMessages(data <- jsonlite::stream_in(file(args[1]), verbose = FALSE))
 }
 miv <- args[5] # 新传入的参数miv
+mav <- args[6] # 新传入的参数miv
 # 定性计算类型分数
 if (!is.na(args[2]) && args[2] != "non") {
     data2 <- read.csv(args[2]) # header = FALSE)
@@ -280,7 +281,7 @@ for (Position in 1:nrow(data)) {
                 sc_ <- append(sc_, data2[dddd1_2$label[i], dddd2_2$label[i]])
             }
         }
-    } else {
+    } else if (!is.na(args[2]) && args[2] != "non") {
         # 定性
         for (i in 1:nrow(dddd1)) {
             dict_index <- which(data2$pair == paste(dddd1$label[i], dddd2$label[i], sep = "--"))
@@ -290,6 +291,19 @@ for (Position in 1:nrow(data)) {
                 sc_ <- append(sc_, data2[dict_index, 3])
             }
         }
+    } else {
+        # 默认参数
+        for (i in 1:nrow(dddd1)) {
+            dict_index <- which(data2$pair == paste(dddd1$label[i], dddd2$label[i], sep = "--"))
+            # print(dddd1$label[i])
+            # print(dddd2$label[i])
+            if (dddd1$label[i] == dddd2$label[i]) {
+                sc_ <- append(sc_, mav)
+            } else {
+                sc_ <- append(sc_, miv)
+            }
+        }
+        print(sc_)
     }
 
     data_frame_sc_ <- data.frame(Score = sc_)
@@ -328,8 +342,8 @@ for (Position in 1:nrow(data)) {
     # cat(filename)
     ggsave(filename,
         plot = pp1 / pp,
-        width = min(mylength * 10, 1000),
-        height = min(mylength * 12, 1000),
+        width = min(mylength * 15, 1000),
+        height = min(mylength * 15, 1000),
         units = "mm",
         limitsize = FALSE
     )
