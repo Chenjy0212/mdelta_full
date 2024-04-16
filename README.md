@@ -6,33 +6,33 @@
 [![Jupyter](https://img.shields.io/badge/-Jupyter-ffffff?logo=jupyter)](https://jupyter.org/)
 [![r](https://img.shields.io/badge/-Rcript-blue?logo=R)](https://www.r-project.org/)
 
-- **`mDELTA`** is an algorithm for **m**ultifuricating **D**evelopmental c**E**ll **L**ineage **T**ree **A**lignment. In essence, it compares two rooted, unordered, tip-labeled trees, and finds the best global ｜ local correspondence between the nodes. The **mDELTA** program is designed for analyzing developmental cell lineage trees
+- **`MDELTA`** is an algorithm for **M**ultifuricating **D**evelopmental c**E**ll **L**ineage **T**ree **A**lignment. In essence, it compares two rooted, unordered, tip-labeled trees, and finds the best global/local correspondence between the nodes. The **mDELTA** program is designed for analyzing developmental cell lineage trees
   reconstructed through single-cell DNA barcoding (such as done by
   **`scGESTALT`** or **`SMALT`**, while greater cellular coverage is expected to
-  yield more meaningful **mDELTA** alignments).
+  yield more meaningful **MDELTA** alignments).
 
 - Except for dealing with cell lineage trees instead of biological
-  sequences, **mDELTA** is conceptually similar to sequence alignment.
+  sequences, **MDELTA** is conceptually similar to sequence alignment.
   It helps quantify similarity among different lineage trees,
   disentangle the consensus and variation, find recurrent motifs, and
   facilitate comparative/evolutionary analyses.
 
 - Also included in this repository are Python/R scripts for
-  statistical analyses and visualization of **mDELTA** results, which
+  statistical analyses and visualization of **MDELTA** results, which
   facilitates their biological interpretation.
 
-- **mDELTA** was developed by Jingyu Chen (EeWhile) under the supervision of
+- **MDELTA** was developed by Jingyu Chen (EeWhile) under the supervision of
   Professor Jian-Rong Yang at the Zhongshan School of Medicine of Sun
   Yat-Sen University in China.
 
-For more details, please visit
+For more details, please refer to the following content:
 
-> - You can try to learn about the latest examples of dynamic mDELTA running results, which will help you better understand the purpose of mDERTA ⚙️
+> - You can try to learn about the latest examples of dynamic MDELTAUI running results, which will help you better understand the purpose of mDERTA ⚙️
 >   <http://eewhile.cn/mdelta_ui>
 >
 > ![mdelta_ui](./image/mdelta_ui.png)
 >
-> - You can obtain a separate Python package for mDELTA for further development
+> - You can obtain a separate Python package for mDELTA for further development(Note that the version of this package is relatively old and many features have not been updated).
 >   <https://github.com/Chenjy0212/mdelta>
 
 If you have any questions, please contact me. My contact information is located at the bottom
@@ -65,35 +65,35 @@ myargs = get_default()
 
 ### Running 🚀
 
-Select, click, and swipe to achieve automatic parameter acquisition. The relevant parameters are detailed in the "参数解析" section of the menu. Continuing to run the next section of code will obtain the desired result.
+Select, click, and swipe to achieve automatic parameter acquisition. The relevant parameters are detailed in the "Parameter parsing table" section of the menu. Continuing to run the next section of code will obtain the desired result.
 
 ```python
-%run $mdelta $TREE $TREE2 -nt $N2T -nt2 $N2T2 -xsd $XScoreFile -lsd $LScoreFile -t $top -ma $ma -mi $mi -p $p -T $Tqdm -n $notebook -mg $mgg -x $diffs -o $output -P $PERM -c $cpu
-mdelta_json = output + '{}_{}_top{}_diff{}_pv{}_miv{}_mav{}_mg{}.json'.format(os.path.basename(TREE).split('.')[0], os.path.basename(TREE2).split('.')[0], top, str(diffs),  str(p), str(mi), str(ma), str(mgg))
-!Rscript $match_tree $mdelta_json $XScoreFile $output $ma
+%run $mdelta $TREE $TREE2 -nt $N2T -nt2 $N2T2 -xsd $XScoreFile -lsd $LScoreFile -t $top -ma $ma -mi $mi -p $p -T $Tqdm -n $notebook -mg $mgg -x $diffs -o $output -P $PERM -c $cpu -pper $pper
+!Rscript $match_tree $mdelta_json $XScoreFile $output $LScoreFile $mi $ma
 %run $network $mdelta_json $output
-!Rscript $densitree $mdelta_json $output
-!Rscript $da $mdelta_json $output
+!Rscript $densitree $mdelta_json $output $dcc
+!Rscript $da $mdelta_json $output $dcc
 ```
 
 <details>
 <summary>show more 👈👈👈 CLICK</summary>
 <pre><code>
-TREE,TREE2,N2T,N2T2,XScoreFile,LScoreFile,top,mavv,mavvstep,mivv,mivvstep,ps,psstep,tqdm,n,mg,mgstep,xs,xsstep,o,PERM,cpu,mdelta,match_tree,network,densitree,da = get_listvalue(myargs.values())
+from itertools import product
+TREE,TREE2,N2T,N2T2,XScoreFile,LScoreFile,top,mavv,mavvstep,mivv,mivvstep,ps,psstep,tqdm,n,mg,mgstep,xs,xsstep,o,PERM,cpu,mdelta,match_tree,network,densitree,da,dcc,pper = get_listvalue(myargs.values())
 output = get_output(o)
 notebook, Tqdm = TF_to_10(n, tqdm)
-for ma in forlist(mavv[0], mavv[1], mavvstep):
-    for mi in forlist(mivv[0], mivv[1], mivvstep):
-        for p in forlist(ps[0], ps[1], psstep):
-            for mgg in forlist(mg[0], mg[1], mgstep):
-                for diffs in forlist(xs[0], xs[1], xsstep):
-                    %run $mdelta $TREE $TREE2 -nt $N2T -nt2 $N2T2 -xsd $XScoreFile -lsd $LScoreFile -t $top -ma $ma -mi $mi -p $p -T $Tqdm -n $notebook -mg $mgg -x $diffs -o $output -P $PERM -c $cpu
-                    if not PERM > 0:
-                        mdelta_json = output + '{}_{}_top{}_diff{}_pv{}_miv{}_mav{}_mg{}.json'.format(os.path.basename(TREE).split('.')[0], os.path.basename(TREE2).split('.')[0], top, str(diffs),  str(p), str(mi), str(ma), str(mgg))
-                        !Rscript $match_tree $mdelta_json $XScoreFile $output $ma
-                        %run $network $mdelta_json $output
-                        !Rscript $densitree $mdelta_json $output
-                        !Rscript $da $mdelta_json $output
+for ma, mi, p, mgg, diffs in product(forlist(mavv[0], mavv[1], mavvstep),
+                                     forlist(mivv[0], mivv[1], mivvstep),
+                                     forlist(ps[0], ps[1], psstep),
+                                     forlist(mg[0], mg[1], mgstep),
+                                     forlist(xs[0], xs[1], xsstep)):
+    %run $mdelta $TREE $TREE2 -nt $N2T -nt2 $N2T2 -xsd $XScoreFile -lsd $LScoreFile -t $top -ma $ma -mi $mi -p $p -T $Tqdm -n $notebook -mg $mgg -x $diffs -o $output -P $PERM -c $cpu -pper $pper
+    if not PERM > 0:
+        mdelta_json = output + '{}_{}_top{}_diff{}_pv{}_miv{}_mav{}_mg{}.json'.format(os.path.basename(TREE).split('.')[0], os.path.basename(TREE2).split('.')[0], top, str(diffs),  str(p), str(mi), str(ma), str(mgg))
+        !Rscript $match_tree $mdelta_json $XScoreFile $output $LScoreFile $mi $ma
+        %run $network $mdelta_json $output
+        !Rscript $densitree $mdelta_json $output $dcc
+        !Rscript $da $mdelta_json $output $dcc
 </code></pre>
 </details>
 
@@ -352,9 +352,11 @@ Using the idea of dynamic programming, update the score matrix. Except for the s
 
 In order to speed up our computing speed, we can prepare the socrefile in advance, and use the data preprocessing program [`mdelta_prepro`](https://github.com/Chenjy0212/mdelta_prepro) to calculate our biological data in advance, which can be reused or regenerated in the future. Greatly improve efficiency.
 
-![pre](./image/score_pre.png)
-[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=Chenjy0212&repo=mdelta_prepro)](https://github.com/Chenjy0212/mdelta_prepro)
+<!-- ![pre](./image/score_pre.png) -->
+
 ![pre2](./image/mdelta_prepro.png)
+
+[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=Chenjy0212&repo=mdelta_prepro)](https://github.com/Chenjy0212/mdelta_prepro)
 
 # Procedure 🎬
 

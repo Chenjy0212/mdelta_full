@@ -303,7 +303,7 @@ for (Position in 1:nrow(data)) {
                 sc_ <- append(sc_, miv)
             }
         }
-        print(sc_)
+        # print(sc_)
     }
 
     data_frame_sc_ <- data.frame(Score = sc_)
