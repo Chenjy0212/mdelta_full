@@ -324,7 +324,7 @@ mDELTA.py -h
 > > [`DensitreeALL`](https://github.com/Chenjy0212/mdelta_full/tree/main/Output_example/DensitreeALL)
 > >
 > > > [`_densitrees_info.csv`](https://github.com/Chenjy0212/mdelta_full/tree/main/Output_example/DensitreeALL/_densitrees_info.csv)  
-> > > ''' All density tree results are represented as ：
+> > > All density tree results are represented as ：
 > > >
 > > > 1. MatchTimes_TreeX_Label_densitree_leaves_match.csv
 > > > 2. The nwk subtree sequence file of TreeX and its root node have been converted to a cell type nwk subtree sequence file '''
@@ -332,7 +332,7 @@ mDELTA.py -h
 > > [`DensitreeBEST`](https://github.com/Chenjy0212/mdelta_full/tree/main/Output_example/DensitreeBEST)
 > >
 > > > 1. MatchTimes_TreeX_Label_densitree_leaves_match.csv
-> > > 2. The nwk subtree sequence file of TreeX and its root node have been converted to a cell type nwk subtree sequence file '''
+> > > 2. The nwk subtree sequence file of TreeX and its root node have been converted to a cell type nwk subtree sequence file
 > >
 > > ![network](./image/densitree.png)
 
@@ -340,9 +340,9 @@ mDELTA.py -h
 
 Using the idea of dynamic programming, update the score matrix. Except for the scores of the end nodes derived from default values or user input `socrefile`, the scores of all other cells are calculated using the **weighted bipartite graph most matching algorithm (KM)** to obtain the optimal value
 
-![菜单](./image/mdelta_algorithm.png "mdelta algorithm")
+<!-- ![算法](./image/mdelta_algorithm.png "mdelta algorithm") -->
 
----
+## ![算法](./image/dynamic.jpg "mdelta algorithm")
 
 # Background 🌙
 
