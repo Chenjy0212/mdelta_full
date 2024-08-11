@@ -267,7 +267,7 @@ def get_default():
     jslink((positional.top_left, 'value'), (positional.bottom_left, 'value'))
     jslink((positional.top_right, 'value'), (positional.bottom_right, 'value'))
     '''
-    #必选参数
+    #Required parameters
     #TreeSeqFile,TreeSeqFile2
     TreeSeqFile = widgets.Combobox(layout=Layout(width='auto', height='auto'))
     TreeSeqFile2 = widgets.Combobox(layout=Layout(width='auto', height='auto'))
@@ -275,8 +275,8 @@ def get_default():
     TreeSeqFile.description = 'TreeSeqFile'
     TreeSeqFile2.description = 'TreeSeqFile2'
     #空白时候的提示
-    TreeSeqFile.placeholder = '请在此输入文件名或文件路径，或者在最右方点击选择'
-    TreeSeqFile2.placeholder = '请在此输入文件名或文件路径，或者在最右方点击选择'
+    TreeSeqFile.placeholder = 'Please enter the file name or path here, or click on select from the far right corner'
+    TreeSeqFile2.placeholder = 'Please enter the file name or path here, or click on select from the far right corner'
     #默认值
     # TreeSeqFile.value = '/home/ee_while/TreeFile_nwk/Example_CLT_1.nwk'
     # TreeSeqFile2.value = '/home/ee_while/TreeFile_nwk/Example_CLT_2.nwk'
@@ -297,7 +297,7 @@ def get_default():
     #合在一起
     positional = widgets.VBox([TreeSeqFile, TreeSeqFile2])
     
-    #option 可选参数\
+    #Optional parameters
     #名称转类型
     Name2TypeFile = widgets.Combobox(layout=Layout(width='auto', height='auto'))
     Name2TypeFile2 = widgets.Combobox(layout=Layout(width='auto', height='auto'))
@@ -305,8 +305,8 @@ def get_default():
     Name2TypeFile.description = 'Name2TypeFile'
     Name2TypeFile2.description = 'Name2TypeFile2'
     #空白时候的提示
-    Name2TypeFile.placeholder = '请在此输入文件名或文件路径，或者在最右方点击选择'
-    Name2TypeFile2.placeholder = '请在此输入文件名或文件路径，或者在最右方点击选择'
+    Name2TypeFile.placeholder = 'Please enter the file name or path here, or click on select from the far right corner'
+    Name2TypeFile2.placeholder = 'Please enter the file name or path here, or click on select from the far right corner'
     #默认值
     #Name2TypeFile.value = "/mnt/data5/disk/ee_while/mdelta/ExampleFile/Name2Type.csv"
     #Name2TypeFile2.value = "/mnt/data5/disk/ee_while/mdelta/ExampleFile/Name2Type.csv"
@@ -328,7 +328,7 @@ def get_default():
     #控件的标题
     XScoreDictFile.description = 'XScoreDictFile'
     #空白时候的提示
-    XScoreDictFile.placeholder = '请在此输入文件名或文件路径，或者在最右方点击选择'
+    XScoreDictFile.placeholder = 'Please enter the file name or path here, or click on select from the far right corner'
     #默认值的选项目列表
     ScoreDictFileist = ['ExampleFile/Xscorefile.csv',
                        ]
@@ -345,7 +345,7 @@ def get_default():
                         # '/home/ee_while/JOB220901/E5.csv',
                         # '/home/ee_while/JOB220901/F11.csv',
                         # '/home/ee_while/JOB220901/GS.csv',]
-    LScoreDictFile = widgets.Combobox(layout=Layout(width='auto', height='auto'), description = 'LScoreDictFile', placeholder = '请在此输入文件名或文件路径，或者在最右方点击选择', options = LScoreDictFileist)
+    LScoreDictFile = widgets.Combobox(layout=Layout(width='auto', height='auto'), description = 'LScoreDictFile', placeholder = 'Please enter the file name or path here, or click on select from the far right corner', options = LScoreDictFileist)
 #     QScoreDictFile2 = widgets.Combobox(layout=Layout(width='auto', height='auto'), description = 'ScoreDictFile2', placeholder = '请在此输入文件名或文件路径，或者在最右方点击选择', options = QScoreDictFileist)
     
     #定量计算截取罚分的percent
@@ -370,7 +370,7 @@ def get_default():
     mav = widgets.VBox([mav1, mavstep])
     
     #miv
-    miv1 = widgets.FloatRangeSlider(value = (-1.0, -1.0), description='miv', min= -10.0, max = 0.0, layout=Layout(width='auto', height='auto'))
+    miv1 = widgets.FloatRangeSlider(value = (-1.0, -1.0), description='miv', min= -10.0, max = 10.0, layout=Layout(width='auto', height='auto'))
     mivstep = widgets.FloatSlider(value=1.0, min = 0.1, max= 10.0, description='miv_step', layout=Layout(width='auto', height='auto'))
     #合在一起
     miv = widgets.VBox([miv1, mivstep])
@@ -396,18 +396,18 @@ def get_default():
     mytqdm = widgets.Checkbox(
         # value=True,
         value = False,
-        description='Tqdm 循环进度条',
+        description='Progress bar',
         disabled=False,
         indent=False)
     #jupyter 编译环境
     jupyter = widgets.Checkbox(
         value=True,
-        description='Jupyter lab/nptebook编译环境',
+        description='Jupyter lab/nptebook opperating environment',
         disabled=False,
         indent=False)
     
     #输出的路径
-    output = widgets.Text(description = '保存路径', value='result', placeholder = '默认为当前目录下的 result文件夹下，可输入文件夹绝对或相对路径名称，eg： /home/user/result/ or /home/user/result or result or result/', layout=Layout(width='auto', height='auto'))
+    output = widgets.Text(description = 'Saved path', value='result', placeholder = 'The default is the result folder in the current directory, and you can enter the absolute or relative path name of the folder', layout=Layout(width='auto', height='auto'))
     
     #不同于前N项最优匹配的序列百分比
     diff1 = widgets.IntRangeSlider(value =(0, 0), description='diff | x', min = 0.0, max= 100.0, layout=Layout(width='auto', height='auto'))
@@ -437,11 +437,11 @@ def get_default():
 
     #densitree celltype color
     dccfilelist = ['ExampleFile/celltype_color.csv']      
-    dccfile = widgets.Combobox(layout=Layout(width='auto', height='auto'),description = 'type to color', placeholder = '请在此输入文件名或文件路径，或者在最右方点击选择', options = dccfilelist)
+    dccfile = widgets.Combobox(layout=Layout(width='auto', height='auto'),description = 'type to color', placeholder = 'Please enter the file name or path here, or click on select from the far right corner', options = dccfilelist)
 
     dcc = widgets.VBox([dccfile])
     
-    #可选参数
+    #Optional parameters
     options = widgets.Accordion(children=[
         Name2Type,
         dingxing,
@@ -457,18 +457,18 @@ def get_default():
         dcc,
     ])
     
-    title_list = ['谱系树终末节点名称转为节点类型文件',
-                  '定性计算: 终末节点类型匹配得分文件',
-                  '定量计算：终末节点特征文件（如细胞基因表达量）',
-                  'LOCAL alignment：最优匹配的前N项结果（top=0 则为GLOBAL alignment）',
-                  '终末节点一致匹配得分',
-                  '终末节点错配减分',
-                  '剪枝罚分',
-                  '剪枝有效率',
-                  '中间节点融合罚分',
-                  '不同于前N项最优匹配的序列百分比',
-                  '随机打乱终末节点所在位置的次数（不改变拓扑结构）',
-                  '密度树的细胞类型对应颜色文件'
+    title_list = ['Convert the terminal Cell Name of the CLT to a Cell Type file',
+                  'Qualitative calculation: terminal cell type matching score file',
+                  'Quantitative calculation: file of differences in cell gene expression levels',
+                  'LOCAL alignment: he top N results of optimal matching（top=0, LOBAL alignment）',
+                  'Score for consistent matching of terminal nodes',
+                  'Terminal node mismatch score',
+                  'Pruning penalty points',
+                  'Pruning efficiency',
+                  'Penalty points for intermediate node fusion',
+                  'The percentage of sequences that are different from the top N best matches,',
+                  'Randomly shuffle the number of times the final node is located (without changing the topology)',
+                  'Color files corresponding to cell types in density trees'
                    ]
     
     for i in range(len(title_list)):
@@ -479,17 +479,17 @@ def get_default():
         positional,
         options,
     ])
-    accordion.set_title(0, '必选参数 CLT')
-    accordion.set_title(1, '可选参数')
+    accordion.set_title(0, 'Required parameters')
+    accordion.set_title(1, 'Optional parameters')
     
     menu1 = widgets.VBox([accordion, widgets.HBox([mytqdm, jupyter]), output])
-    menu2 = widgets.VBox([widgets.HTML(value="<h2><b>必选参数</b></h2>"),
+    menu2 = widgets.VBox([widgets.HTML(value="<h2><b>Required parameters</b></h2>"),
                           positional, 
-                          widgets.HTML(value="<h2><b>可选参数</b></h2>"),
-                          widgets.Label(value="定性计算"),
+                          widgets.HTML(value="<h2><b>Optional parameters</b></h2>"),
+                          widgets.Label(value="Qualitative calculation"),
                           Name2Type,
                           dingxing,
-                          widgets.Label(value="定量计算"),
+                          widgets.Label(value="Quantitative Calculation"),
                           dingliang,
                           widgets.Label(), #相当于分隔符
                           top,
@@ -500,7 +500,7 @@ def get_default():
                           merge,
                           diff,
                           P,
-                          widgets.HTML(value="<h3><b>密度树</b></h3>"),
+                          widgets.HTML(value="<h3><b>DensiTree</b></h3>"),
                           dcc,
                           widgets.HBox([mytqdm, jupyter]), 
                           output])
@@ -513,11 +513,11 @@ def get_default():
                          mdelta_algorithm,
                          how
                         ]
-    tab_nest.set_title(0, '菜单—类型1')
-    tab_nest.set_title(1, '菜单—类型2')
-    tab_nest.set_title(2, 'mdleta 匹配示例图')
-    tab_nest.set_title(3, 'mDELTA 得分矩阵图')
-    tab_nest.set_title(4, '参数解析')
+    tab_nest.set_title(0, 'Menu (simple)')
+    tab_nest.set_title(1, 'Menu (complete)')
+    tab_nest.set_title(2, 'Matching diagram')
+    tab_nest.set_title(3, 'Dynamic programming')
+    tab_nest.set_title(4, 'Parameter')
     display(tab_nest)
     
     #if positional.top_left.value in TreeSeqFileList:
