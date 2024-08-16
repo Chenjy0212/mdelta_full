@@ -1,5 +1,5 @@
 # 定义要使用的包列表
-required_packages <- c("rjson", "BiocManager")
+required_packages <- c("rjson", "BiocManager", "aplot")
 
 # 检查每个包是否已经安装
 missing_packages <- setdiff(required_packages, installed.packages())
