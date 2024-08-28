@@ -1,0 +1,11 @@
+mdelta定量比对的输入： 
+TreeseqFile: c_elegans_tree_nodead
+Name2Type: c_elegans_celltype_nodead
+LScoreDict: df_euclidean_quantitive_15.0_70.0
+type to color: df_euclidean_quantitive_15.0_70.0
+
+标准答案：按照定量打分矩阵计算出线虫谱系树上互相对称的子树之间的得分，文件名 c_elegans_symmetic_subtree_expected_score
+
+要解决的问题：1. mdelta比对结果与标准答案出入很大，意味着得分计算不符合真实情况。预期是c_elegans_symmetic_subtree_expected_score中得分在10以上的subtree pair都至少应该出现在mdelta比对的top100里面，并且排名相当靠前。
+                      需要检查在回溯得分计算的过程中，是什么原因导致这些subtree pair得分很低呢？
+                      2. 将mdelta打包成delta那样，方便用户在linux上直接运行，提高工具使用的简便性和实用性
