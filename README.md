@@ -50,6 +50,12 @@ If you have any questions, please contact me. My contact information is located 
 
 # Quick start 💻
 
+## If：Perform operations on the command line⬇️⬇️⬇️
+
+### https://365.kdocs.cn/l/cjnN7kwPsQA2
+
+## Else：Interactive operation through interface view
+
 ### Open the Munu 📖
 
 Open jupyter and run `mdelta_menu.ipynb`, run the following code to automatically install the necessary Python packages and open the mdelta function menu.
