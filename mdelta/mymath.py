@@ -52,10 +52,10 @@ def GetMaxScore(trace,
                 local_matrix_root2_index,
                 lll_label,
                 llll_label,
+                merge: float,
                 prune=-1.0,
                 dict_score={},
                 Algorithm: str = 'KM',
-                merge: float = 100.
                 ):
     # 如果两棵树都是，即是根节点也是叶节点（单一元素），直接查字典，查不到就划归为罚分值prune
     root1node = root1
@@ -165,26 +165,26 @@ def GetMaxScore(trace,
             #     score = max(r1leaf, r2leaf)*prune
 
         # 遍历
-        # for i in zip(root1node.son(), local_matrix_root1_index):
-        #     if i[0].left is not None:
-        #         score_tmp = allmatrix[i[1], root2_index] + prune*(r1leaf - i[0].leaf_count())
-        #         # print(score, score_tmp)
-        #         if score < score_tmp:
-        #             score = score_tmp
-        #             trace[root1_index][root2_index].clear()
-        #             trace[root1_index][root2_index].append([i[1], root2_index])
-        #         #score = max(allmatrix[i[1],root2_index] + prune*(r1leaf - i[0].leaf_count()), score)
-        # for j in zip(root2node.son(), local_matrix_root2_index):
-        #     if j[0].left is not None:
-        #         score_tmp = allmatrix[root1_index, j[1]] + prune*(r2leaf - j[0].leaf_count())
-        #         if score < score_tmp:
-        #             score = score_tmp
-        #             trace[root1_index][root2_index].clear()
-        #             trace[root1_index][root2_index].append([root1_index, j[1]])
-        #         #score = max(allmatrix[root1_index,j[1]] + prune*(r2leaf - j[0].leaf_count()), score)
+        for i in zip(root1node.son(), local_matrix_root1_index):
+            if i[0].left is not None:
+                score_tmp = allmatrix[i[1], root2_index] + prune*(r1leaf - i[0].leaf_count())
+                # print(score, score_tmp)
+                if score < score_tmp:
+                    score = score_tmp
+                    trace[root1_index][root2_index].clear()
+                    trace[root1_index][root2_index].append([i[1], root2_index])
+                #score = max(allmatrix[i[1],root2_index] + prune*(r1leaf - i[0].leaf_count()), score)
+        for j in zip(root2node.son(), local_matrix_root2_index):
+            if j[0].left is not None:
+                score_tmp = allmatrix[root1_index, j[1]] + prune*(r2leaf - j[0].leaf_count())
+                if score < score_tmp:
+                    score = score_tmp
+                    trace[root1_index][root2_index].clear()
+                    trace[root1_index][root2_index].append([root1_index, j[1]])
+                #score = max(allmatrix[root1_index,j[1]] + prune*(r2leaf - j[0].leaf_count()), score)
 
         # merge 融合中间节点
-        if (abs(merge - 100.0) < 1e-10):
+        if abs(merge - 100.0) < 1e-6:
             pass
         else:
             print("\n merge 操作\n")
@@ -205,9 +205,6 @@ def GetMaxScore(trace,
                  for x, xi in enumerate(root1_leaves_nodeobj) if xi in a]
             c = [root2_leaves_label[x]
                  for x, xi in enumerate(root2_leaves_nodeobj) if xi in a]
-            # print(a)
-            # print(b)
-            # print(c)
 
             score_tmpp = ((root1.node_count() - root1.leaf_count() - 1) + (root2.node_count() -
                           root2.leaf_count() - 1) + abs(root1.leaf_count() - root2.leaf_count())) * merge
@@ -221,7 +218,5 @@ def GetMaxScore(trace,
                 for i in zip(b, c):
                     trace[root1_index][root2_index].append(
                         [lll_label.index(i[0]), llll_label.index(i[1])])
-                    #print(lll_label.index(i[0]), llll_label.index(i[1]))
-            #print(lll_label, llll_label)
 
         return score

@@ -31,9 +31,6 @@ parser.add_argument('-nt2','--Name2TypeFile2',type=str, nargs='?', default='', h
 parser.add_argument('-xsd','--XScoreDictFile',type=str, nargs='?', default='', help='[path/filename] A comma-delimited text file used to determine similarity scores between cells. If there are exactly three columns, they will be interpreted as (1) the cell (name or type) in Tree #1, (2) the cell in Tree #2, and (3) the similarity score. If otherwise, the first column will be interpreted as the cell (name or type) and the remaining columns as features of the cell (e.g. expression of a gene). The similarity scores will be estimated between all pairs of cells based on the Euclidean distance calculated using all the features. Overrides `-ma` and `-mi`.')
 
 parser.add_argument('-lsd','--LScoreDictFile',type=str, nargs='?', default='', help='[path/filename] A score matrix where row names represent the names of all leaf nodes in the first tree, column names represent the names of all leaf nodes in the second tree, and the corresponding score values in the column and column spaces represent their matching scores.')
-# parser.add_argument('-sd1','--ScoreDictFile1',type=str, default='', help='to be continued')
-# parser.add_argument('-sd2','--ScoreDictFile2',type=str, default='', help='to be continued')
-# parser.add_argument('-pp','--PrunePercent',type=float, default=5, help='to be continued')
 
 parser.add_argument('-t','--top',type=int, default=0, help='[int > 0] Performs local (instead of global) alignment, and output the top NUM local alignments with the highest score (e.g. `-t 10`). In the case of global alignment, this parameter should be omitted.')
 parser.add_argument('-ma','--mav',type=float, default=2., help=' [float] Default=2.')
@@ -46,7 +43,7 @@ parser.add_argument('-P','--PERM',type=int, default=0, help='[int > 0] Toggle fo
 parser.add_argument('-a','--Alg',type=str, default='KM', help='[KM / GA] Use Kuhn-Munkres or Greedy Algorithm to find the optimal alignment score.')
 parser.add_argument('-c','--CPUs',type=int, default=10, help='[int > 0] Number of threads for multi-processing. Default to 50., it can reach the maximum number of local CPU cores - 1.')
 parser.add_argument('-o','--output',type=str, default='', nargs='?', help='[path] Output path, eg:\'/home/username\'')
-parser.add_argument('-mg','--merge',type=float, default=10, help='[float] This is the scaling factor for calculating the score of merging an internal node (e.g. -mg -1), which is multiplied by the number of tips of the internal node to be merged. Default to 100.')
+parser.add_argument('-mg','--merge',type=float, default=100, help='[float] This is the scaling factor for calculating the score of merging an internal node (e.g. -mg -1), which is multiplied by the number of tips of the internal node to be merged. Default to 100.')
 parser.add_argument('-x','--diff',type=int, default=0, help='[int > 0] Alignment must consist of a minimal of DIFF percent aligned cell pairs that are different from previous(better) local alignments in order to be considered as another new alignment (e.g. `-x 20` means 20 percent).')
 
 args = parser.parse_args() #开始解析参数 --对于可选参数来说
@@ -69,7 +66,6 @@ notebook = args.notebook
 Alg = args.Alg
 times = args.PERM
 CPUs = args.CPUs
-# print(CPUs)
 diff = args.diff
 merge = args.merge
 output = args.output
@@ -1078,7 +1074,7 @@ if __name__ == '__main__':
                          merge = merge) 
     #创建文件夹
     mymkdir(output)
-    #print("\n********** Score Matrix **********\n", example['matrix'])
+    # print("\n********** Score Matrix **********\n", example['matrix'])
     matrix_filenam = output + TreeSeqFileName + '_' + TreeSeqFileName2 +'_pv' + str(pv) + '_miv' + str(miv) + '_mav' + str(mav) + '_matrix.csv'
     example['matrix'].to_csv(matrix_filenam)
              
@@ -1086,16 +1082,16 @@ if __name__ == '__main__':
         filename= output + TreeSeqFileName + '_' + TreeSeqFileName2 + '_top' + str(top) + '_diff' + str(diff) +'_pv' + str(pv) + '_miv' + str(miv) + '_mav' + str(mav) + '_mg' + str(merge) +'.json'
         with open(filename,'w') as file_obj:
             json.dump(example['T1root_T2root'], file_obj, cls=NpEncoder)
-        '''    
-        print("\n********** T1root_T2root **********")
-        for key,value in example['T1root_T2root'][0].items():
-            print('{key}:{value}'.format(key = key, value = value))
-        print("\n********** tree1_leaves_nodename_to_label **********\n", example['tree1_leaves_nodename_to_label']) 
-        print("\n********** tree1_leaves_nodename_to_celltype **********\n", example['tree1_leaves_nodename_to_celltype'])
-        print("\n********** tree2_leaves_nodename_to_label **********\n", example['tree2_leaves_nodename_to_label']) 
-        print("\n********** tree2_leaves_nodename_tocelltype **********\n", example['tree2_leaves_nodename_to_celltype'])         
-        #print("\n********** score_dict **********\n", example['score_dict'])         
-        '''
+        
+        # print("\n********** T1root_T2root **********")
+        # for key,value in example['T1root_T2root'][0].items():
+        #     print('{key}:{value}'.format(key = key, value = value))
+        # print("\n********** tree1_leaves_nodename_to_label **********\n", example['tree1_leaves_nodename_to_label']) 
+        # print("\n********** tree1_leaves_nodename_to_celltype **********\n", example['tree1_leaves_nodename_to_celltype'])
+        # print("\n********** tree2_leaves_nodename_to_label **********\n", example['tree2_leaves_nodename_to_label']) 
+        # print("\n********** tree2_leaves_nodename_tocelltype **********\n", example['tree2_leaves_nodename_to_celltype'])         
+        # print("\n********** score_dict **********\n", example['score_dict'])         
+        
     elif top > 0:
         
         filename= output + TreeSeqFileName + '_' + TreeSeqFileName2 + '_top' + str(top) + '_diff' + str(diff) +'_pv' + str(pv) + '_miv' + str(miv) + '_mav' + str(mav) + '_mg' + str(merge) +'.json'
